@@ -1,4 +1,4 @@
 package com.sprta.newsfeed;
 
-public class jvaj {
+public class javaj {
 }
