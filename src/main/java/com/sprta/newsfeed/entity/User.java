@@ -3,10 +3,12 @@ package com.sprta.newsfeed.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Entity
-@Table(name = "user_id")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,19 +17,28 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    private boolean isDeleted = false; // 논리적 삭제
 
     public User() {
     }
 
-    public User(String username, String password, String email) {
+    public User(String username, String email, String password) {
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
+
     }
 
+    public void setDeleted(boolean b) {
+
+    }
+
+    public void setDeletedAt(LocalDateTime now) {
+    }
 }
