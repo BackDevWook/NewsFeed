@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -41,9 +42,10 @@ public class CommentService {
         return commentRepository.findAll().stream().map(CommentResponseDto::commentDto).toList();
     }
 
-//    public void updateComment(Long id, String newContent) {
-//        Comment findComment = findByIdOrElseThrow(id);
-//
-//        findComment.updateComment(newContent);
-//    }
+    @Transactional
+    public void updateComment(Long id, String newContent) {
+        Comment findComment = findByIdOrElseThrow(id);
+
+        findComment.updateComment(newContent);
+    }
 }

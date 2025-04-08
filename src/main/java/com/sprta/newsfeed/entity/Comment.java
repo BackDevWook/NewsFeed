@@ -43,13 +43,13 @@ public class Comment extends BaseEntity{
         this.content = content;
     }
 
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    public void updateComment(String content) {
-//        this.content = content;
-//    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
 
 
 }
