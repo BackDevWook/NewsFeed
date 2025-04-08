@@ -4,6 +4,8 @@ import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.dto.Comment.CommentWithUsernameResponseDto;
 import com.sprta.newsfeed.dto.Comment.CreateCommentRequestDto;
 import com.sprta.newsfeed.dto.Comment.UpdateCommentRequestDto;
+import com.sprta.newsfeed.exception.comment.ErrorResponse;
+import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +54,13 @@ public class CommentController {
         commentService.delete(commentId);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 댓글 404 에러
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("404", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 

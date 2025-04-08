@@ -2,6 +2,7 @@ package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.entity.Comment;
+import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     public Comment findByIdOrElseThrow(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, id + "는 없는 아이디입니다."));
+        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id + "은(는) 없는 아이디입니다."));
     }
 
     public CommentResponseDto save(String content) {
