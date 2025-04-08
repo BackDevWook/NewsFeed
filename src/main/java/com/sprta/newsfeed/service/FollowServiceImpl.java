@@ -48,8 +48,12 @@ public class FollowServiceImpl implements FollowService {
 
     // 내 팔로워/팔로잉 수 조회
     @Override
-    public FollowCountResponseDto getMyCountFollowerAndFollowing() {
-        return null;
+    public FollowCountResponseDto getMyCountFollowerAndFollowing(User currentUser) {
+
+        int countFollowing = followRepository.countByFollowing(currentUser); // 팔로잉 수
+        int countFollower = followRepository.countByFollowers(currentUser); // 팔로워 수
+
+        return new FollowCountResponseDto(countFollower, countFollowing);
     }
 
     // 유저 팔로워/팔로잉 수 조회
@@ -57,8 +61,9 @@ public class FollowServiceImpl implements FollowService {
     public FollowCountResponseDto getUserCountFollowerAndFollowing(Long userId) {
         User user = userRepositroy.findById(userId).orElseThrow(() -> new RuntimeException("사용자가 존재하지 않습니다."));
 
-        int countFollowing = followRepository.countByFollowing(user);
-        int countFollower = followRepository.countByFollowers(user);
+
+        int countFollowing = followRepository.countByFollowing(user); // 팔로잉 수
+        int countFollower = followRepository.countByFollowers(user); // 팔로워 수
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
