@@ -12,7 +12,7 @@ public interface FollowService {
     public void deleteFollow(Long followingId, User currentUser);
 
     // 3. 내 팔로워 수 카운팅 및 조회
-    public FollowCountResponseDto getMyCountFollowerAndFollowing();
+    public FollowCountResponseDto getMyCountFollowerAndFollowing(User currentUser);
 
     // 4. 유저 팔로워 수 카운팅 및 조회
     public FollowCountResponseDto getUserCountFollowerAndFollowing(Long userId);
