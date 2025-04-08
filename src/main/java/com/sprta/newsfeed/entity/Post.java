@@ -3,14 +3,16 @@ package com.sprta.newsfeed.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "post")
-@EnableJpaAuditing
-public class Post extends BaseEntity{
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,9 @@ public class Post extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(length = 500,nullable = false)
     private String content;
@@ -29,10 +34,24 @@ public class Post extends BaseEntity{
     @Column(nullable = false)
     private Integer countLikes;
 
-    public Post(User user, String content, Integer countComments, Integer countLikes) {
+
+    public Post(User user, String title, String content, Integer countComments, Integer countLikes) {
         this.user = user;
+        this.title = title;
         this.content = content;
-        this.countComments = 0;
-        this.countLikes = 0;
+        this.countComments = countComments;
+        this.countLikes = countLikes;
     }
+
+    public void updateContent(String content){
+        this.content = content;
+    }
+
+    public Post(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
+
+
 }
