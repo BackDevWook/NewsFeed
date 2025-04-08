@@ -1,12 +1,10 @@
 package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
-import com.sprta.newsfeed.dto.Comment.CommentWithUsernameResponseDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -47,5 +45,11 @@ public class CommentService {
         Comment findComment = findByIdOrElseThrow(id);
 
         findComment.updateComment(newContent);
+    }
+
+    public void delete(Long commentId) {
+        Comment findComment = findByIdOrElseThrow(commentId);
+
+        commentRepository.delete(findComment);
     }
 }
