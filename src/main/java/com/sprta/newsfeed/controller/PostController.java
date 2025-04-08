@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -49,4 +50,27 @@ public class PostController {
             }
         }
     }
+
+    @GetMapping
+    public List<PostResponseDto> getAllPost(@RequestParam int page){
+        return postService.getAllPosts(page);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id){
+        try{
+            postService.deletePost(id);
+            return ResponseEntity.ok("게시물 삭제됨");
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of(
+                            "status",404,
+                            "errorCode","NOT_FOUND",
+                            "message","없는 게시물입니다."
+                    )
+            );
+        }
+    }
+
+
 }

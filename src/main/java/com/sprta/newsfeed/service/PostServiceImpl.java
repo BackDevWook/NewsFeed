@@ -6,9 +6,14 @@ import com.sprta.newsfeed.dto.UpdatePostRequestDto;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -51,5 +56,28 @@ public class PostServiceImpl implements PostService {
             post.getCountComments(),
             post.getCountLikes()
     );
+    }
+
+    @Override
+    public List<PostResponseDto> getAllPosts(int page) {
+    Pageable pageable   = PageRequest.of(page,10);
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        return posts.stream().map(post->new PostResponseDto(
+                post.getId(),
+                post.getUser().getUsername(),
+                post.getTitle(),
+                post.getContent(),
+                post.getCountComments(),
+                post.getCountLikes()
+        )).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public void deletePost(Long id) {
+     Post post = postRepository.findById(id)
+             .orElseThrow(()-> new RuntimeException("없는 게시물입니다."));
+      postRepository.delete(post);
     }
 }

@@ -12,4 +12,7 @@ public interface PostService {
 
     PostResponseDto updatePost(Long id,UpdatePostRequestDto requestDto);
 
+    List<PostResponseDto> getAllPosts(int page);
+
+    void deletePost(Long id);
 }
