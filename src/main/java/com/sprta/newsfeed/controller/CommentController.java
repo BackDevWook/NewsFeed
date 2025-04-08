@@ -29,13 +29,13 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<CommentResponseDto>> findAll() {
-//
-//        List<CommentResponseDto> commentResponseDtoList = commentService.findAll();
-//
-//        return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity<List<CommentResponseDto>> findAll() {
+
+        List<CommentResponseDto> commentResponseDtoList = commentService.findAll();
+
+        return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK);
+    }
 
 //    @PatchMapping("{id}")
 //    public ResponseEntity<Void> updateComment(
