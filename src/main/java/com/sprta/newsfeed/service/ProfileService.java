@@ -16,4 +16,5 @@ public class ProfileService {
         return profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저의 프로필이 없습니다."));
     }
+
 }
