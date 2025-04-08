@@ -21,7 +21,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody CreateCommentRequestDto requestDto) {
 
-        commentService.save(requestDto.get)
+        commentService.save(requestDto.get);
 
     }
 
