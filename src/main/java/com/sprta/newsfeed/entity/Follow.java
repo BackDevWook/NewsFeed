@@ -15,14 +15,14 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private User follower; // 팔로워
+    private User Follower; // 팔로워
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private User following; // 팔로잉
+    private User Following; // 팔로잉
 
     public Follow(User follower, User following) {
-        this.follower = follower;
-        this.following = following;
+        this.Follower = follower;
+        this.Following = following;
     }
 }

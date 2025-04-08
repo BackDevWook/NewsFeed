@@ -3,16 +3,14 @@ package com.sprta.newsfeed.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "post")
-public class Post extends BaseEntity {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +19,6 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
-
-    @Column(nullable = false)
-    private String title;
 
     @Column(length = 500,nullable = false)
     private String content;
@@ -34,24 +29,18 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private Integer countLikes;
 
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
-    public Post(User user, String title, String content, Integer countComments, Integer countLikes) {
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    public Post(User user, String content, Integer countComments, Integer countLikes, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.user = user;
-        this.title = title;
         this.content = content;
-        this.countComments = countComments;
-        this.countLikes = countLikes;
+        this.countComments = 0;
+        this.countLikes = 0;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
-
-    public void updateContent(String content){
-        this.content = content;
-    }
-
-    public Post(String title, String content, User user) {
-        this.title = title;
-        this.content = content;
-        this.user = user;
-    }
-
-
 }
