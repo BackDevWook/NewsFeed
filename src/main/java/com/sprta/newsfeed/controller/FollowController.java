@@ -1,5 +1,6 @@
 package com.sprta.newsfeed.controller;
 
+import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.service.FollowService;
