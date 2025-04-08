@@ -2,6 +2,7 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
 import com.sprta.newsfeed.entity.User;
+import com.sprta.newsfeed.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/follows")
 public class FollowController {
 
+    private final FollowService followService;
 
     // 1. 팔로우 하기
     @PostMapping("/{id}")
     public ResponseEntity<String> followUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) User currentUser) {
-        return null;
+
+        followService.saveFollow(id, currentUser);
+
+        return ResponseEntity.ok("팔로우 성공함");
     }
 
     // 2. 팔로우 취소
