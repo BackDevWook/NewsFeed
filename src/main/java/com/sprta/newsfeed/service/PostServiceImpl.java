@@ -4,6 +4,7 @@ import com.sprta.newsfeed.dto.CreatePostRequestDto;
 import com.sprta.newsfeed.dto.PostResponseDto;
 import com.sprta.newsfeed.dto.UpdatePostRequestDto;
 import com.sprta.newsfeed.entity.Post;
+import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor //final로 선언된 필드에 대해 생성자 자동생성
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -26,10 +27,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponseDto createPost(CreatePostRequestDto requestDto) {
-      userRepository.findById(1L)
+      User user = userRepository.findById(1L)
               .orElseThrow(()->new RuntimeException("사용자 없음"));
 
-      Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
+      Post post = new Post(requestDto.getTitle(), requestDto.getContent(),user);
       Post saved = postRepository.save(post);
 
       return new PostResponseDto(
