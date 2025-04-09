@@ -1,8 +1,12 @@
 package com.sprta.newsfeed.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
 public class SignupResponseDto {
     private final Long id;
 
@@ -10,10 +14,6 @@ public class SignupResponseDto {
 
     private final String email;
 
-    public SignupResponseDto(Long id, String username, String email) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-    }
+
 }
 
