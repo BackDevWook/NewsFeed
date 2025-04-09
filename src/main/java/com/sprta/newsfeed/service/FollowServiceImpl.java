@@ -4,6 +4,7 @@ import com.sprta.newsfeed.dto.FollowCountResponseDto;
 import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.FollowRepository;
+import com.sprta.newsfeed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class FollowServiceImpl implements FollowService {
 
     public final FollowRepository followRepository;
-    public final UserRepositroy userRepositroy;
+    public final UserRepository userRepositroy;
 
     // 팔로우 하기
     @Override
@@ -51,7 +52,7 @@ public class FollowServiceImpl implements FollowService {
     public FollowCountResponseDto getMyCountFollowerAndFollowing(User currentUser) {
 
         int countFollowing = followRepository.countByFollowing(currentUser); // 팔로잉 수
-        int countFollower = followRepository.countByFollowers(currentUser); // 팔로워 수
+        int countFollower = followRepository.countByFollower(currentUser); // 팔로워 수
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
@@ -63,7 +64,7 @@ public class FollowServiceImpl implements FollowService {
 
 
         int countFollowing = followRepository.countByFollowing(user); // 팔로잉 수
-        int countFollower = followRepository.countByFollowers(user); // 팔로워 수
+        int countFollower = followRepository.countByFollower(user); // 팔로워 수
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
