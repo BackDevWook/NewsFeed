@@ -18,8 +18,8 @@ public class LoginFilter implements Filter {
 
 
     //로그인 인증이 필요없는 URL 리스트
-    private static final String[] WHITE_LIST = {"/api/signup","/api/login","/api/posts","/api/posts/{id}","/api/delete"};
 
+    private static final String[] WHITE_LIST = {"/api/signup","/api/login","/api/posts","/api/posts/{id}","/api/delete", "/api/posts/{postId}/comments"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
