@@ -1,5 +1,6 @@
 package com.sprta.newsfeed.dto;
 
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class SignupRequestDto {
 
     @NotBlank(message = "사용자 이름은 필수입니다.")
@@ -26,7 +28,6 @@ public class SignupRequestDto {
             message = "비밀번호는 영문 대소문자, 숫자, 특수문자를 포함해 8자 이상이어야 합니다."
     )
     private String password;
-
 
 
 }

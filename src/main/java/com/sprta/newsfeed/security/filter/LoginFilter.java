@@ -17,8 +17,8 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
 
-    //로그인 인증이 필요없는 URI 리스트
-    private static final String[] WHITE_LIST = {"/api/signup", "/api/login", "/api/delete"};
+    //로그인 인증이 필요없는 URL 리스트
+    private static final String[] WHITE_LIST = {"/api/signup","/api/login","/api/posts","/api/posts/{id}","/api/delete"};
 
 
     @Override
