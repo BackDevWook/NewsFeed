@@ -2,7 +2,7 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
-import com.sprta.newsfeed.entity.User;
+import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,28 +17,33 @@ public class FollowController {
 
     // 1. 팔로우 하기
     @PostMapping("/{id}")
-    public ResponseEntity<String> followUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) User currentUser) {
+    public ResponseEntity<String> followUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        followService.saveFollow(id, currentUser);
+        followService.saveFollow(id, dto.getId());
 
         return ResponseEntity.ok("팔로우 성공함");
     }
 
     // 2. 팔로우 취소
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> unFollowUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) User currentUser) {
-        return null;
+    public ResponseEntity<String> unFollowUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
+
+        followService.deleteFollow(id, dto.getId());
+
+        return ResponseEntity.ok("팔로우 삭제 됌");
     }
 
     // 3. 내 팔로잉/팔로워 조회
     @GetMapping
-    public ResponseEntity<FollowCountResponseDto> getMyFollowingAndFollower(@SessionAttribute(name = Const.LOGIN_USER) User currentUser) {
-        return null;
+    public ResponseEntity<FollowCountResponseDto> getMyFollowingAndFollower(@SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
+
+        return ResponseEntity.ok(followService.getMyCountFollowerAndFollowing(dto.getId()));
+
     }
 
     // 4. 유저 팔로잉/팔로워 조회
     @GetMapping("/{id}")
     public ResponseEntity<FollowCountResponseDto> getUserFollowingAndFollower(@PathVariable Long id) {
-        return null;
+        return ResponseEntity.ok(followService.getUserCountFollowerAndFollowing(id));
     }
 }
