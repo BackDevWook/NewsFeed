@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -29,6 +32,7 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private Integer likesCount = 0;
+
 
 
     public Post(User user, String title, String content, Integer countComments, Integer likesCount) {
