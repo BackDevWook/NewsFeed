@@ -1,5 +1,6 @@
 package com.sprta.newsfeed.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class FollowCountResponseDto {
+public class PostCreateRequestDto {
 
-    // 팔로잉, 팔로워 수
-    private final int followerCount;
-    private final int followingCount;
+    private final String title;
+
+    private final String content;
 
 }

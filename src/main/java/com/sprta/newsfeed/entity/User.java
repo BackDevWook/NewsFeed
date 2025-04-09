@@ -25,6 +25,8 @@ public class User {
 
     private boolean isDeleted = false; // 논리적 삭제
 
+    private LocalDateTime deletedAt;
+
     public User() {
     }
 
@@ -35,10 +37,12 @@ public class User {
 
     }
 
-    public void setDeleted(boolean b) {
-
+    public void markAsDeleted() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 
-    public void setDeletedAt(LocalDateTime now) {
+    public boolean isDeleted() {
+        return isDeleted;
     }
 }

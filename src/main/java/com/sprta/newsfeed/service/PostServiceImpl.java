@@ -1,19 +1,20 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.CreatePostRequestDto;
+
+import com.sprta.newsfeed.dto.PostCreateRequestDto;
 import com.sprta.newsfeed.dto.PostResponseDto;
-import com.sprta.newsfeed.dto.UpdatePostRequestDto;
+import com.sprta.newsfeed.dto.PostUpdateRequestDto;
+import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
+import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,62 +25,78 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
+    private final CommentRepository commentRepository;
 
     @Override
-    public PostResponseDto createPost(CreatePostRequestDto requestDto) {
-      User user = userRepository.findById(1L)
-              .orElseThrow(()->new RuntimeException("사용자 없음"));
+    //게시글 작성 로직
+    public PostResponseDto createPost(PostCreateRequestDto requestDto) {
+        User user = userRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("사용자가 존재하지 않습니다."));
 
-      Post post = new Post(requestDto.getTitle(), requestDto.getContent(),user);
-      Post saved = postRepository.save(post);
+        Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
+        Post saved = postRepository.save(post);
 
-      return new PostResponseDto(
-              saved.getId(),
-              saved.getUser().getUsername(),
-              saved.getTitle(),
-              saved.getContent(),
-              saved.getCountComments(),
-              saved.getCountLikes()
-      );
+        return new PostResponseDto(
+                saved.getId(),
+                saved.getUser().getUsername(),
+                saved.getTitle(),
+                saved.getContent(),
+                saved.getCountComments(),
+                saved.getLikesCount()
+        );
     }
 
     @Override
-    public PostResponseDto updatePost(Long id, UpdatePostRequestDto requestDto) {
-    Post post = postRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("없는 게시물입니다."));
-    post.updateContent(requestDto.getContent());
+    //게시글 수정 로직
+    public PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("없는 게시물입니다."));
+        post.updateContent(requestDto.getContent());
 
-    return new PostResponseDto(
-            post.getId(),
-            post.getUser().getUsername(),
-            post.getTitle(),
-            post.getContent(),
-            post.getCountComments(),
-            post.getCountLikes()
-    );
-    }
-
-    @Override
-    public List<PostResponseDto> getAllPosts(int page) {
-    Pageable pageable   = PageRequest.of(page,10);
-        Page<Post> posts = postRepository.findAll(pageable);
-
-        return posts.stream().map(post->new PostResponseDto(
+        return new PostResponseDto(
                 post.getId(),
                 post.getUser().getUsername(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                post.getCountLikes()
+                post.getLikesCount()
+        );
+    }
+
+    @Override
+    //게시글 조회 로직
+    public List<PostResponseDto> getAllPosts(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        return posts.stream().map(post -> new PostResponseDto(
+                post.getId(),
+                post.getUser().getUsername(),
+                post.getTitle(),
+                post.getContent(),
+                post.getCountComments(),
+                post.getLikesCount()
         )).collect(Collectors.toList());
 
     }
 
     @Override
+    // 게시글 + 댓글 조회
+    public PostResponseDto getPostWithComments(Long id) {
+      Post post = postRepository.findById(id)
+              .orElseThrow(()-> new RuntimeException("없는 게시물입니다."));
+
+      List<Comment> comments = commentRepository.findAllByPostId(id);
+
+      return new PostResponseDto(post, comments);
+    }
+
+
+    @Override
+    //게시글 삭제 로직
     public void deletePost(Long id) {
-     Post post = postRepository.findById(id)
-             .orElseThrow(()-> new RuntimeException("없는 게시물입니다."));
-      postRepository.delete(post);
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("없는 게시물입니다."));
+        postRepository.delete(post);
     }
 }
