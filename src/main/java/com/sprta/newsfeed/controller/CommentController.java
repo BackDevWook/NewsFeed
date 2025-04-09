@@ -35,17 +35,22 @@ public class CommentController {
             @Valid @RequestBody CreateCommentRequestDto requestDto,
             HttpServletRequest request
     ) {
+        // 로그인된 사용자 정보를 세션에서 가져옴
         LoginResponseDto loginUser = (LoginResponseDto) request.getSession().getAttribute(Const.LOGIN_USER);
 
+        // 로그인되지 않은 경우 UNAUTHORIZED(401) 상태 코드 반환
         if (loginUser == null) {
             return new ResponseEntity<>("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
         }
 
+        // 세션에서 가져온 사용자 정보를 기반으로 DB에서 사용자 조회
         User user = userRepository.findById(loginUser.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
 
+        // 댓글 작성 서비스 호출: 사용자가 작성한 내용을 DB에 저장하고, 반환된 DTO를 클라이언트에게 전달
         CommentResponseDto commentResponseDto = commentService.save(user, requestDto.getContent());
 
+        // 댓글 저장 성공 후, 생성된 댓글 정보와 HTTP 상태 코드 CREATED(201) 반환
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
 
