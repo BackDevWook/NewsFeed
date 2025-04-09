@@ -3,11 +3,13 @@ package com.sprta.newsfeed.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Entity
 @Getter
 @Table(name = "comment")
 @NoArgsConstructor
+@EnableJpaAuditing
 public class Comment extends BaseEntity{
 
 
@@ -36,4 +38,18 @@ public class Comment extends BaseEntity{
         this.user = user;
         this.post = post;
     }
+
+    public Comment(String content) {
+        this.content = content;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
+
+
 }

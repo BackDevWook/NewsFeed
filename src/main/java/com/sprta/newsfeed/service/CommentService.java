@@ -1,47 +1,56 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.CommentResponseDto;
+import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.entity.Comment;
+import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
 
     public Comment findByIdOrElseThrow(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, id + "는 없는 아이디입니다."));
+        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id + "은(는) 없는 아이디입니다."));
     }
 
-    public User findUserByUsernameOrElseThrow(String username) {
-        return userRepository.findUserByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, username + "은(는) 없는 이름입니다."));
-    }
-
-    public ResponseEntity save(String content) {
-
-        // 사용자 정보 추가
-        User findUsername = findUserByUsernameOrElseThrow(username);
+    public CommentResponseDto save(String content) {
 
         // 객체 생성
         Comment comment = new Comment(content);
-        comment.setUser(findUsername);
 
         // 저장된 객체 반환
         Comment savedComment = commentRepository.save(comment);
 
         // 반환받은 객체 DTO 형태로 반환
-        return new CommentResponseDto(savedComment.getId(), savedComment.getUsername(), savedComment.getContent());
-
+        return new CommentResponseDto(savedComment.getId(), savedComment.getContent());
 
     }
 
+    public List<CommentResponseDto> findAll() {
 
+        return commentRepository.findAll().stream().map(CommentResponseDto::commentDto).toList();
+    }
 
+    @Transactional
+    public void updateComment(Long id, String newContent) {
+        Comment findComment = findByIdOrElseThrow(id);
+
+        findComment.updateComment(newContent);
+    }
+
+    public void delete(Long commentId) {
+        Comment findComment = findByIdOrElseThrow(commentId);
+
+        commentRepository.delete(findComment);
+    }
 }
