@@ -5,23 +5,20 @@ import com.sprta.newsfeed.dto.*;
 import com.sprta.newsfeed.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Validated
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto requestDto) {
         SignupResponseDto signupResponseDto =
                 userService.signUp(
                         requestDto.getUsername(),
@@ -44,7 +41,6 @@ public class UserController {
 
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id,

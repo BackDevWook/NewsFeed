@@ -33,6 +33,7 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(password);
 
         User user = new User(username, email, encodedPassword);
+
         User savedUser = userRepository.save(user);
 
         return new SignupResponseDto(
