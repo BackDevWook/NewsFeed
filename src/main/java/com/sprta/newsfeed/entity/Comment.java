@@ -20,11 +20,8 @@ public class Comment extends BaseEntity{
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private Integer countLikes;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
@@ -32,14 +29,14 @@ public class Comment extends BaseEntity{
     private Post post;
 
 
-    public Comment(String content, Integer countLikes, User user, Post post) {
+    public Comment(String content, User user, Post post) {
         this.content = content;
-        this.countLikes = countLikes;
         this.user = user;
         this.post = post;
     }
 
-    public Comment(String content) {
+    public Comment(User user, String content) {
+        this.user = user;
         this.content = content;
     }
 
