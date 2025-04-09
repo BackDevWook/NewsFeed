@@ -3,9 +3,11 @@ package com.sprta.newsfeed.repository;
 import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     // DB에 이미 팔로우한 사람이 있는지 찾기
