@@ -1,11 +1,14 @@
 package com.sprta.newsfeed.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class ProfileUpdateRequestDto {
-
-    private String introduction; // 수정할 소개글
-    private String password;     // 비밀번호
+    private final String introduction;
+    private final String password;
 }
