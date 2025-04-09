@@ -10,6 +10,7 @@ import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +48,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     //게시글 수정 로직
     public PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(id)
