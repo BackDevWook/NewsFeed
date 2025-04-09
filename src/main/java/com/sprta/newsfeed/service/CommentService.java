@@ -5,10 +5,8 @@ import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,14 +41,18 @@ public class CommentService {
 
     @Transactional
     public void updateComment(Long id, String newContent) {
-        Comment findComment = findByIdOrElseThrow(id);
 
+        // 인가 처리
+
+        Comment findComment = findByIdOrElseThrow(id);
         findComment.updateComment(newContent);
     }
 
     public void delete(Long commentId) {
-        Comment findComment = findByIdOrElseThrow(commentId);
 
+        // 인가 처리
+
+        Comment findComment = findByIdOrElseThrow(commentId);
         commentRepository.delete(findComment);
     }
 }
