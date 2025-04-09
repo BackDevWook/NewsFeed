@@ -53,8 +53,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호 불일치");
         }
 
-        return new LoginResponseDto(user.getEmail(), "로그인 성공");
+        return new LoginResponseDto(user.getId(), user.getEmail());
     }
+
+    /*public logout(){}*/
+
 
     @Transactional
     public void delete(Long userId, String inputPassword) {
@@ -69,8 +72,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
-        user.setDeleted(true);
-        user.setDeletedAt(LocalDateTime.now());
+        user.markAsDeleted();  // 내부적으로 isDeleted, deletedAt 동시 처리
     }
 
 }

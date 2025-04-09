@@ -1,5 +1,6 @@
 package com.sprta.newsfeed.security.filter;
 
+import com.sprta.newsfeed.common.Const;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,8 +16,10 @@ import java.io.IOException;
 @Component
 public class LoginFilter implements Filter {
 
+
     //로그인 인증이 필요없는 URL 리스트
-    private static final String[] WHITE_LIST = {"/api/signup","/api/login","/api/posts","/api/posts/{id}"};
+    private static final String[] WHITE_LIST = {"/api/signup","/api/login","/api/posts","/api/posts/{id}","/api/delete"};
+
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -27,15 +30,17 @@ public class LoginFilter implements Filter {
 
         // 요청 URL 가져오기
         String requestURL = request.getRequestURI();
+        log.info("requestURL: {}", requestURL);
+        log.info("로그인 검사 실행");
 
         // 검사가 필요한 URL 이면 실행
         if(!isWhiteList(requestURL)) {
 
             // 세션을 가져와서 로그인 상태인지 확인
             HttpSession loginSession = request.getSession(false);
-
+            log.info("loginSession: {}", loginSession);
             // 로그인 상태가 아니라면 에러 던지기
-            if(loginSession == null || loginSession.getAttribute("LOGIN_ID") == null) {
+            if(loginSession == null || loginSession.getAttribute(Const.LOGIN_USER) == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 하셈");
                 return;
             }

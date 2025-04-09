@@ -16,14 +16,14 @@ java {
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
-    }
+    } 
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
+dependencies {ㅇ
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
