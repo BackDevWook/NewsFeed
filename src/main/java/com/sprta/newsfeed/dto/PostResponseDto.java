@@ -4,13 +4,17 @@ package com.sprta.newsfeed.dto;
 import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
 public class PostResponseDto {
 
     private final Long id;

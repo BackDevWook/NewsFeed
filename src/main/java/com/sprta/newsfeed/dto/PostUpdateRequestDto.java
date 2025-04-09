@@ -1,15 +1,15 @@
 package com.sprta.newsfeed.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-//@AllArgsConstructor는 RequestDto에서 사용하지 않음
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
 public class PostUpdateRequestDto {
 
     private final String content;
 
-    public PostUpdateRequestDto(String content) {
-        this.content = content;
-    }
 }
