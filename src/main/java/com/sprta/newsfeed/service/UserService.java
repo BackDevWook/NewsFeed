@@ -4,6 +4,8 @@ import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.dto.SignupResponseDto;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,22 +25,22 @@ public class UserService {
     }
 
     @Transactional
-    public SignupResponseDto signUp(String username, String email, String password) {
+    public SignupResponseDto signUp(String userName, String email, String password) {
 
         if (userRepository.existsByEmailAndIsDeletedFalse(email)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.");
-        }
+        }// 수정필요
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(password);
 
-        User user = new User(username, email, encodedPassword);
+        User user = new User(userName, email, encodedPassword);
 
         User savedUser = userRepository.save(user);
 
         return new SignupResponseDto(
                 savedUser.getId(),
-                savedUser.getUsername(),
+                savedUser.getUserName(),
                 savedUser.getEmail());
 
     }
@@ -56,13 +58,18 @@ public class UserService {
         return new LoginResponseDto(user.getId(), user.getEmail());
     }
 
-    /*public logout(){}*/
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 
 
     @Transactional
-    public void delete(Long userId, String inputPassword) {
+    public void signout(Long userId, String inputPassword) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.")); //수정 필요
 
         if (user.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.GONE, "이미 탈퇴한 사용자입니다.");

@@ -32,7 +32,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
 
         LoginResponseDto login = userService.login(requestDto.getEmail(), requestDto.getPassword());
 
@@ -40,29 +40,27 @@ public class UserController {
 
         session.setAttribute(Const.LOGIN_USER, login);
 
-        return new ResponseEntity<>(login, HttpStatus.OK);
+        return ResponseEntity.ok("로그인 되었습니다");
     }
 
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate(); // 세션 무효화
-        }
-        return ResponseEntity.ok("로그아웃 성공");
+        userService.logout(request);  // 서비스로 위임
+        return ResponseEntity.ok("로그아웃 되었습니다");
     }
 
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody DeleteRequestDto requestDto,
+    @DeleteMapping("/signout")
+    public ResponseEntity<String> signout(@RequestBody DeleteRequestDto requestDto,
                                          HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
         LoginResponseDto responseDto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        userService.delete(responseDto.getUserId(), requestDto.getPassword());
+        userService.signout(responseDto.getUserid(), requestDto.getPassword());
+
 
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
