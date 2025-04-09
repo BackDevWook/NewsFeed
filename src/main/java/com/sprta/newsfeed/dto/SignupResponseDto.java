@@ -3,6 +3,8 @@ package com.sprta.newsfeed.dto;
 import lombok.Getter;
 
 @Getter
+
+
 public class SignupResponseDto {
     private final Long id;
 

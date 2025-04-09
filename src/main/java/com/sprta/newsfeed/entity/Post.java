@@ -25,10 +25,10 @@ public class Post extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private Integer countComments;
+    private Integer countComments = 0;
 
     @Column(nullable = false)
-    private Integer likesCount;
+    private Integer likesCount = 0;
 
 
     public Post(User user, String title, String content, Integer countComments, Integer likesCount) {
@@ -43,11 +43,15 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
+
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.countComments = 0;
+        this.likesCount = 0;
     }
+
 
 
 }

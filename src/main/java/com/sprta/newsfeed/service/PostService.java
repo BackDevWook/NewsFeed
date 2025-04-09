@@ -14,5 +14,7 @@ public interface PostService {
 
     List<PostResponseDto> getAllPosts(int page);
 
+    PostResponseDto getPostWithComments(Long id);
+
     void deletePost(Long id);
 }

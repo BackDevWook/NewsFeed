@@ -4,8 +4,10 @@ package com.sprta.newsfeed.service;
 import com.sprta.newsfeed.dto.PostCreateRequestDto;
 import com.sprta.newsfeed.dto.PostResponseDto;
 import com.sprta.newsfeed.dto.PostUpdateRequestDto;
+import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
+import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
+    private final CommentRepository commentRepository;
 
     @Override
     //게시글 작성 로직
@@ -77,6 +79,18 @@ public class PostServiceImpl implements PostService {
         )).collect(Collectors.toList());
 
     }
+
+    @Override
+    // 게시글 + 댓글 조회
+    public PostResponseDto getPostWithComments(Long id) {
+      Post post = postRepository.findById(id)
+              .orElseThrow(()-> new RuntimeException("없는 게시물입니다."));
+
+      List<Comment> comments = commentRepository.findAllByPostId(id);
+
+      return new PostResponseDto(post, comments);
+    }
+
 
     @Override
     //게시글 삭제 로직

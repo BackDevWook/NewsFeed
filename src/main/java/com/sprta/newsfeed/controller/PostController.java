@@ -39,6 +39,13 @@ public class PostController {
         return postService.getAllPosts(page);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long id){
+        PostResponseDto response = postService.getPostWithComments(id);
+        return ResponseEntity.ok(response);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         postService.deletePost(id);

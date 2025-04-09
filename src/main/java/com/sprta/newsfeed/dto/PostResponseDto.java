@@ -1,7 +1,14 @@
 package com.sprta.newsfeed.dto;
 
 
+import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
+import com.sprta.newsfeed.entity.Comment;
+import com.sprta.newsfeed.entity.Post;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class PostResponseDto {
@@ -18,6 +25,8 @@ public class PostResponseDto {
 
     private final Integer likesCount;
 
+    private final List<CommentResponseDto> comments;// 댓글 리스트 추가
+
     public PostResponseDto(Long id, String userName, String title, String content, Integer commentCount, Integer likesCount) {
         this.id = id;
         this.userName = userName;
@@ -25,5 +34,20 @@ public class PostResponseDto {
         this.content = content;
         this.commentCount = commentCount;
         this.likesCount = likesCount;
+        this.comments = new ArrayList<>();
+    }
+
+
+
+    public PostResponseDto(Post post, List<Comment> comments){
+        this.id = post.getId();
+        this.userName = post.getUser().getUsername();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.commentCount = post.getCountComments();
+        this.likesCount = post.getLikesCount();
+        this.comments = comments.stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

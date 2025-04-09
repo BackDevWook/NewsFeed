@@ -15,6 +15,12 @@ public class CommentResponseDto {
         this.content = content;
     }
 
+    public CommentResponseDto(Comment comment){
+        this.id = comment.getId();
+        this.content = comment.getContent();
+    }
+
+
     public static CommentResponseDto commentDto(Comment comment) {
         return new CommentResponseDto(comment.getId(), comment.getContent());
     }
