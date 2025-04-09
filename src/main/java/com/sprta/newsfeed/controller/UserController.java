@@ -61,6 +61,7 @@ public class UserController {
 
         userService.signout(responseDto.getUserid(), requestDto.getPassword());
 
+
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 }

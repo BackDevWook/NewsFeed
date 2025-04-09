@@ -1,6 +1,7 @@
 package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
+import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.FollowRepository;
@@ -17,10 +18,11 @@ public class FollowServiceImpl implements FollowService {
 
     // 팔로우 하기
     @Override
-    public void saveFollow(Long followingId, User currentUser) {
+    public void saveFollow(Long followingId, Long myId) {
 
         // 내가 팔로우 할 유저 객체 선언
         User target = userRepositroy.findById(followingId).orElseThrow(() -> new RuntimeException("팔로우할 사용자가 존재하지 않습니다."));
+        User currentUser = userRepositroy.findById(myId).orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         // 자기 자신 팔로우 방지하기
         if (currentUser.getId().equals(target.getId())) {
@@ -31,15 +33,16 @@ public class FollowServiceImpl implements FollowService {
             throw new RuntimeException("이미 팔로우한 사용자입니다.");
         }
 
-        followRepository.save(new Follow(target, currentUser));
+        followRepository.save(new Follow(currentUser, target));
     }
 
     // 팔로우 삭제
     @Override
-    public void deleteFollow(Long followingId, User currentUser) {
+    public void deleteFollow(Long followingId, Long myId) {
 
-        // 팔로우 삭제할 유저 객체
-        User target = userRepositroy.findById(followingId).orElseThrow(() -> new RuntimeException(("언팔로우할 사용자가 존재하지 않습니다.")));
+        // 내가 팔로우 할 유저 객체 선언
+        User target = userRepositroy.findById(followingId).orElseThrow(() -> new RuntimeException("팔로우할 사용자가 존재하지 않습니다."));
+        User currentUser = userRepositroy.findById(myId).orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowing(currentUser, target).orElseThrow(() -> new RuntimeException("팔로우 관계가 존재하지 않습니다."));
@@ -49,10 +52,13 @@ public class FollowServiceImpl implements FollowService {
 
     // 내 팔로워/팔로잉 수 조회
     @Override
-    public FollowCountResponseDto getMyCountFollowerAndFollowing(User currentUser) {
+    public FollowCountResponseDto getMyCountFollowerAndFollowing(Long myId) {
 
-        int countFollowing = followRepository.countByFollowing(currentUser); // 팔로잉 수
-        int countFollower = followRepository.countByFollower(currentUser); // 팔로워 수
+        // 로그인 한 유저 정보 찾기
+        User currentUser = userRepositroy.findById(myId).orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+        int countFollower = followRepository.countByFollowing(currentUser); // 나를 팔로워 한 사람
+        int countFollowing = followRepository.countByFollower(currentUser); // 내가 팔로잉 한 사람
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
@@ -60,11 +66,12 @@ public class FollowServiceImpl implements FollowService {
     // 유저 팔로워/팔로잉 수 조회
     @Override
     public FollowCountResponseDto getUserCountFollowerAndFollowing(Long userId) {
+
+        // 찾을 유저
         User user = userRepositroy.findById(userId).orElseThrow(() -> new RuntimeException("사용자가 존재하지 않습니다."));
 
-
-        int countFollowing = followRepository.countByFollowing(user); // 팔로잉 수
-        int countFollower = followRepository.countByFollower(user); // 팔로워 수
+        int countFollower = followRepository.countByFollowing(user); // 나를 팔로워 한 사람
+        int countFollowing = followRepository.countByFollower(user); // 내가 팔로잉 한 사람
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
