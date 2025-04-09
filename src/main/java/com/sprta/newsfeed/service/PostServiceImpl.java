@@ -6,6 +6,7 @@ import com.sprta.newsfeed.dto.UpdatePostRequestDto;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.PostRepository;
+import com.sprta.newsfeed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

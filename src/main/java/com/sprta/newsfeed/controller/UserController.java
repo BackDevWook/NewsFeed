@@ -5,6 +5,7 @@ import com.sprta.newsfeed.dto.*;
 import com.sprta.newsfeed.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
         SignupResponseDto signupResponseDto =
                 userService.signUp(
                         requestDto.getUsername(),
@@ -35,17 +36,34 @@ public class UserController {
 
         LoginResponseDto login = userService.login(requestDto.getEmail(), requestDto.getPassword());
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
 
         session.setAttribute(Const.LOGIN_USER, login);
 
         return new ResponseEntity<>(login, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id,
-                                         @RequestBody DeleteRequestDto requestDto) {
-        userService.delete(id, requestDto.getPassword());
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+        }
+        return ResponseEntity.ok("로그아웃 성공");
+    }
+
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestBody DeleteRequestDto requestDto,
+                                         HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        LoginResponseDto responseDto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
+
+        userService.delete(responseDto.getId(), requestDto.getPassword());
+
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 }
