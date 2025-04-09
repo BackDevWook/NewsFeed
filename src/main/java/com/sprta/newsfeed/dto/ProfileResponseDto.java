@@ -5,10 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class ProfileResponseDto {
-
     private String introduction;
 
-    public ProfileResponseDto(Profile profilc){
-        this.introduction = profilc.getIntroduction();
+    public ProfileResponseDto(Profile profile) {
+        this.introduction = profile.getIntroduction();
     }
 }
