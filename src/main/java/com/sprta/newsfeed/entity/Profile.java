@@ -21,9 +21,15 @@ public class Profile {
 
     private String introduction;  // 소개글
 
-    // 소개글 업데이트
-    public void updateIntroduction(String intro){
-        this.introduction = intro;
+    // 소개글 작성
+    public Profile(User user, String introduction){
+        this.user = user;
+        this.introduction = introduction;
+    }
+
+    // 소개글 수정
+    public void updateIntroduction(String introduction){
+        this.introduction = introduction;
     }
 }
 
