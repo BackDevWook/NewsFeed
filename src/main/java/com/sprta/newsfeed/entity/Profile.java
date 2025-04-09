@@ -19,12 +19,7 @@ public class Profile {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String introduction;  // 소개글
-
-    // 소개글 업데이트
-    public void updateIntroduction(String intro){
-        this.introduction = intro;
-    }
+    private String introduction;
 }
 
 
