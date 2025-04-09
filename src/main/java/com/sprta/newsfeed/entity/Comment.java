@@ -24,7 +24,7 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -47,6 +47,4 @@ public class Comment extends BaseEntity{
     public void updateComment(String content) {
         this.content = content;
     }
-
-
 }
