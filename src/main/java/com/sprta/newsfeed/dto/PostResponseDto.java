@@ -31,6 +31,7 @@ public class PostResponseDto {
 
     private final List<CommentResponseDto> comments;// 댓글 리스트 추가
 
+    //댓글 없이 게시글만 응답할 때
     public PostResponseDto(Long id, String userName, String title, String content, Integer commentCount, Integer likesCount) {
         this.id = id;
         this.userName = userName;
@@ -41,8 +42,7 @@ public class PostResponseDto {
         this.comments = new ArrayList<>();
     }
 
-
-
+    //게시글 + 댓글 응답할 때
     public PostResponseDto(Post post, List<Comment> comments){
         this.id = post.getId();
         this.userName = post.getUser().getUserName();

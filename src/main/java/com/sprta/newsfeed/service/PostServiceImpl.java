@@ -30,8 +30,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     //게시글 작성 로직
-    public PostResponseDto createPost(PostCreateRequestDto requestDto) {
-        User user = userRepository.findById(1L)
+    public PostResponseDto createPost(PostCreateRequestDto requestDto, Long loginUserId) {
+        User user = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new RuntimeException("사용자가 존재하지 않습니다."));
 
         Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
