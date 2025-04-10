@@ -7,6 +7,8 @@ import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
+import com.sprta.newsfeed.security.customerror.CustomException;
+import com.sprta.newsfeed.security.customerror.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -69,17 +71,39 @@ public class CommentService {
 
     /**
      * 댓글 내용을 수정하는 메서드
-     * @param id 댓글의 고유 식별자 ID값
+     * @param commentId 댓글의 고유 식별자 ID값
+     * @param userId 유저의 고유 식별자 ID 값
      * @param newContent 수정한 댓글 내용
      */
     @Transactional
-    public void updateComment(Long id, String newContent) {
+    public void updateComment(Long commentId, String newContent, Long userId) {
+        // 댓글 작성자 여부 확인
+        boolean isOwner = checkCommentOwner(commentId, userId);
+
+        // 작성자가 아니면 예외를 던짐
+        if (!isOwner) {
+            throw new CustomException(ErrorCode.COMMENT_UPDATE_FORBIDDEN);
+        }
 
         // 댓글을 조회하고, 댓글이 존재하지 않으면 예외를 던짐
-        Comment findComment = findByIdOrElseThrow(id);
+        Comment comment = findByIdOrElseThrow(commentId);
 
         // 댓글 내용 업데이트
-        findComment.updateComment(newContent);
+        comment.updateComment(newContent);
+    }
+
+    /**
+     * 댓글 작성자 확인 메서드
+     * @param commentId 댓글 ID
+     * @param userId 로그인한 사용자 ID
+     * @return 댓글 작성자인지 여부
+     */
+    public boolean checkCommentOwner(Long commentId, Long userId) {
+        // 댓글을 찾고 작성자가 로그인한 사용자와 일치하는지 확인
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        return comment.getUser().getId().equals(userId);
     }
 
     /**
@@ -93,15 +117,5 @@ public class CommentService {
 
         // 댓글 삭제
         commentRepository.delete(findComment);
-    }
-
-
-    // 수정할 때 인가처리
-    public boolean checkCommentOwner(Long commentId, Long userId) {
-        // 댓글을 찾고 작성자가 로그인한 사용자와 일치하는지 확인
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
-
-        return comment.getUser().getId().equals(userId);
     }
 }
