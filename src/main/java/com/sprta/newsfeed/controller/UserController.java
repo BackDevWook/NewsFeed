@@ -2,6 +2,10 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.*;
+import com.sprta.newsfeed.dto.Login.LoginRequestDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
+import com.sprta.newsfeed.dto.Signup.SignupRequestDto;
+import com.sprta.newsfeed.dto.Signup.SignupResponseDto;
 import com.sprta.newsfeed.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
