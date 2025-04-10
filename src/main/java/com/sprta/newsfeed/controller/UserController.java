@@ -23,7 +23,7 @@ public class UserController {
         // 회원가입 비즈니스 로직 실행 (중복 확인, 비밀번호 암호화 등)
         SignupResponseDto signupResponseDto =
                 userService.signUp(
-                        requestDto.getUsername(),
+                        requestDto.getUserName(),
                         requestDto.getEmail(),
                         requestDto.getPassword()
                 );

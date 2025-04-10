@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class SignupRequestDto {
 
     @NotBlank(message = "사용자 이름은 필수입니다.")
-    private String username;
+    private String userName;
 
     @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "유효한 이메일 형식이 아닙니다.")
