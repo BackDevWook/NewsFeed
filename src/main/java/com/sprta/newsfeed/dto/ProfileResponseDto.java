@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(force = true)
-@AllArgsConstructor
 public class ProfileResponseDto {
+    private final String name;
+    private final String email;
     private final String introduction;
 
-    public ProfileResponseDto(Profile profile) {
-        this.introduction = profile.getIntroduction();
+    public ProfileResponseDto(String name, String email, String introduction) {
+        this.name = name;
+        this.email = email;
+        this.introduction = introduction;
     }
 }

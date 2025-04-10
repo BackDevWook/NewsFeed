@@ -25,4 +25,19 @@ public class GlobalExceptionHandler {
         );
     }
 
+    // 유효성 검사 실패 예외 처리 (@Valid 실패 시)
+    // 즉, "title" : "" <- @NotBlank(message = "제목은 필수입니다.") 내용이 비었을 때 사용하는 예외 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getDefaultMessage())
+                .findFirst()
+                .orElse("잘못된 요청입니다.");
+
+        return new ResponseEntity<>(
+                new ErrorResponse(ErrorCode.BAD_REQUEST.getStatus(), errorMessage),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
 }

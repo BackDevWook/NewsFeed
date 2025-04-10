@@ -3,7 +3,9 @@ package com.sprta.newsfeed.controller;
 import com.sprta.newsfeed.dto.ProfileUpdateRequestDto;
 import com.sprta.newsfeed.entity.Profile;
 import com.sprta.newsfeed.service.ProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,14 +24,17 @@ public class ProfileController {
 
     // 프로필 조회
     @GetMapping("/{userId}")
-    public Profile getProfile(@PathVariable Long userId) {
-        return profileService.getProfile(userId);
+    public ResponseEntity<?> getProfile(@PathVariable Long userId) {
+        return ResponseEntity.ok(profileService.getProfile(userId));
     }
 
     // 프로필 수정
     @PutMapping("/{userId}")
-    public String updateProfile(@PathVariable Long userId, @RequestBody ProfileUpdateRequestDto requestDto) {
+    public ResponseEntity<?> updateProfile(
+            @PathVariable Long userId,
+            @RequestBody @Valid ProfileUpdateRequestDto requestDto
+    ) {
         profileService.updateProfile(userId, requestDto);
-        return "프로필이 성공적으로 수정되었습니다.";
+        return ResponseEntity.ok("프로필이 수정되었습니다.");
     }
 }

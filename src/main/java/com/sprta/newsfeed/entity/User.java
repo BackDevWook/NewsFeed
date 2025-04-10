@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -22,6 +24,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    // 사용자가 누른 좋아요 목록 관리, 사용자가 눌렀던 모든 좋아요도 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLikes> postLikes = new ArrayList<>();
 
     private boolean isDeleted = false; // 논리적 삭제
 
