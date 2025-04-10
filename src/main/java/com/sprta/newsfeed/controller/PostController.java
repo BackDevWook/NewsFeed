@@ -1,6 +1,8 @@
 package com.sprta.newsfeed.controller;
 
 
+import com.sprta.newsfeed.common.Const;
+import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.dto.PostCreateRequestDto;
 import com.sprta.newsfeed.dto.PostResponseDto;
 import com.sprta.newsfeed.dto.PostUpdateRequestDto;
@@ -20,9 +22,11 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateRequestDto requestDto) {
+    //로그인 유저 정보 받아와서 게시글 생성
+    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateRequestDto requestDto,
+                                                      @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        PostResponseDto response = postService.createPost(requestDto);
+        PostResponseDto response = postService.createPost(requestDto, dto.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
