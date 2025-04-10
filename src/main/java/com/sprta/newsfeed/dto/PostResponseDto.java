@@ -45,7 +45,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post, List<Comment> comments){
         this.id = post.getId();
-        this.userName = post.getUser().getUsername();
+        this.userName = post.getUser().getUserName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.commentCount = post.getCountComments();
