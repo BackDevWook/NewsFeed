@@ -55,6 +55,7 @@ public class CommentController {
             return new ResponseEntity<>("로그인이 필요합니다", HttpStatus.UNAUTHORIZED);
         }
 
+        // 유저랑 포스트 정보는 service에서 처리하는게 좋다
         // 세션에서 가져온 사용자 정보로 사용자 조회
         User user = userRepository.findById(loginUser.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
