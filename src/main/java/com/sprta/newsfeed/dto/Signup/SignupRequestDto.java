@@ -1,4 +1,4 @@
-package com.sprta.newsfeed.dto;
+package com.sprta.newsfeed.dto.Signup;
 
 
 import jakarta.validation.constraints.Email;
@@ -18,8 +18,9 @@ public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "유효한 이메일 형식이 아닙니다.")
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@(naver\\.com|gmail\\.com|daum\\.net)$",
-            message = "naver.com, gmail.com, daum.net 이메일만 사용 가능합니다.")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.com$",
+                message = "유효한 이메일 형식이 아닙니다. ex).com")
+
     private String email;
 
     @NotBlank(message = "비밀번호는 필수입니다.")

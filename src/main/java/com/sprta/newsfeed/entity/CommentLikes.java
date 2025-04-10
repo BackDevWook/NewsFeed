@@ -1,6 +1,7 @@
 package com.sprta.newsfeed.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,5 +23,10 @@ public class CommentLikes extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
+
+    public CommentLikes(User user, Comment comment) {
+        this.user = user;
+        this.comment = comment;
+    }
 
 }

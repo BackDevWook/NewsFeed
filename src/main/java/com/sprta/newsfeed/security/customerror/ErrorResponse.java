@@ -15,9 +15,9 @@ public class ErrorResponse { // 에러 메시지를 JSON 형태로 전달할 DTO
     }
 
     // 공통적으로 처리할 수 있게 만든 기본 에러 응답용 생성자
-    public ErrorResponse(int status, String message) {
+    public ErrorResponse(int status, String code, String message) {
         this.status = status;
-        this.code = "E000";
+        this.code = code;
         this.message = message;
     }
 }
