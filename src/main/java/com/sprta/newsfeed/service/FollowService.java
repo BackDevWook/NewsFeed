@@ -1,6 +1,6 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.FollowCountResponseDto;
+import com.sprta.newsfeed.dto.follow.FollowCountResponseDto;
 
 public interface FollowService {
 

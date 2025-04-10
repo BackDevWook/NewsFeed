@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository; // 사용자 저장소 (DB 연동)
@@ -98,6 +100,12 @@ public class UserServiceImpl implements UserService {
 
         // 논리 삭제 처리
         user.markAsDeleted();  // 내부적으로 isDeleted, deletedAt 동시 처리
+    }
+
+    @Override
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
     }
 
 }

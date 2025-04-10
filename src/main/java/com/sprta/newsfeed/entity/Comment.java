@@ -28,6 +28,8 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(nullable = false)
+    private Long likesCount = 0L;
 
     public Comment(User user, Post post, String content) {
         this.user = user;
@@ -46,5 +48,9 @@ public class Comment extends BaseEntity{
 
     public void updateComment(String content) {
         this.content = content;
+    }
+
+    public void updateLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
     }
 }

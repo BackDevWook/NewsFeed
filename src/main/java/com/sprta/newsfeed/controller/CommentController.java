@@ -13,6 +13,9 @@ import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
 import com.sprta.newsfeed.service.CommentService;
+import com.sprta.newsfeed.service.PostService;
+import com.sprta.newsfeed.service.UserService;
+import com.sprta.newsfeed.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +32,10 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
-
+    private final UserService userService;
+    private final PostService postService;
+//    private final UserRepository userRepository;
+//    private final PostRepository postRepository;
 
     /**
      * 댓글 작성
@@ -56,12 +60,10 @@ public class CommentController {
 
         // 유저랑 포스트 정보는 service에서 처리하는게 좋다
         // 세션에서 가져온 사용자 정보로 사용자 조회
-        User user = userRepository.findById(loginUser.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
+        User user = userService.findById(loginUser.getUserId());
 
         //게시물 id 찾아오기
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다"));
+        Post post = postService.findById(postId);
 
         // 댓글 작성 서비스 호출 후 사용자가 작성한 내용을 저장
         CommentResponseDto commentResponseDto = commentService.save(user, post, requestDto.getContent());
@@ -164,6 +166,5 @@ public class CommentController {
         ErrorResponse errorResponse = new ErrorResponse("404", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
-
 
 }
