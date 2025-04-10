@@ -2,7 +2,10 @@ package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.dto.SignupResponseDto;
+import com.sprta.newsfeed.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Optional;
 
 public interface UserService {
 
@@ -17,5 +20,7 @@ public interface UserService {
 
     //회원 탈퇴 기능
     void signout(Long userId, String inputPassword);
+
+    User findById(Long userId);
 }
 
