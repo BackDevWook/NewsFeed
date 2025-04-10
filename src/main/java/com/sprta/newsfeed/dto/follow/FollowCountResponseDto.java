@@ -1,4 +1,4 @@
-package com.sprta.newsfeed.dto;
+package com.sprta.newsfeed.dto.follow;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

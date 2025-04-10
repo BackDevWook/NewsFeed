@@ -11,7 +11,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(404, "E001", "해당 유저를 찾을 수 없습니다."),
 
     // 게시물
-    POST_NOT_FOUND(404, "E", "해당 게시물을 찾을 수 없습니다."),
+    POST_NOT_FOUND(404, "E", "삭제되거나 존재하지 않는 게시물입니다."),
     POST_UPDATE_FAILED(400, "E", "게시물 수정에 실패했습니다."),
     POST_DELETE_FAILED(400, "E", "게시물 삭제에 실패했습니다."),
     POST_CREATION_FAILED(400, "E", "게시물 생성에 실패하셨습니다."),
@@ -34,6 +34,8 @@ public enum ErrorCode {
     PROFILE_UPDATE_FAILED(400, "E", "프로필 수정에 실패했습니다."),
 
     // 좋아요
+    COMMENT_LIKE_NOT_FOUND(404, "E", "해당 댓글에 좋아요 기록이 없습니다."),
+    ALREADY_LIKE_COMMENT(409, "E", "이미 해당 댓글에 좋아요를 했습니다."),
 
     // 인증/인가
     UNAUTHORIZED_USER(401, "E", "로그인 해주세요."),
