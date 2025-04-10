@@ -22,7 +22,7 @@ public class UserController {
     public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
         SignupResponseDto signupResponseDto =
                 userService.signUp(
-                        requestDto.getUsername(),
+                        requestDto.getUserName(),
                         requestDto.getEmail(),
                         requestDto.getPassword()
                 );
@@ -59,7 +59,7 @@ public class UserController {
 
         LoginResponseDto responseDto = (LoginResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        userService.signout(responseDto.getUserid(), requestDto.getPassword());
+        userService.signout(responseDto.getUserId(), requestDto.getPassword());
 
 
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");

@@ -19,7 +19,7 @@ public class FollowController {
     @PostMapping("/{id}")
     public ResponseEntity<String> followUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        followService.saveFollow(id, dto.getId());
+        followService.saveFollow(id, dto.getUserId());
 
         return ResponseEntity.ok("팔로우 성공함");
     }
@@ -28,7 +28,7 @@ public class FollowController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> unFollowUser(@PathVariable Long id, @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        followService.deleteFollow(id, dto.getId());
+        followService.deleteFollow(id, dto.getUserId());
 
         return ResponseEntity.ok("팔로우 삭제 됌");
     }
@@ -37,7 +37,7 @@ public class FollowController {
     @GetMapping
     public ResponseEntity<FollowCountResponseDto> getMyFollowingAndFollower(@SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        return ResponseEntity.ok(followService.getMyCountFollowerAndFollowing(dto.getId()));
+        return ResponseEntity.ok(followService.getMyCountFollowerAndFollowing(dto.getUserId()));
 
     }
 

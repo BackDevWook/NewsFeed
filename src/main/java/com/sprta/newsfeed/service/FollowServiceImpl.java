@@ -6,6 +6,8 @@ import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.FollowRepository;
 import com.sprta.newsfeed.repository.UserRepository;
+import com.sprta.newsfeed.security.customerror.CustomException;
+import com.sprta.newsfeed.security.customerror.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,7 @@ public class FollowServiceImpl implements FollowService {
     public void deleteFollow(Long followingId, Long myId) {
 
         // 내가 팔로우 할 유저 객체 선언
-        User target = userRepositroy.findById(followingId).orElseThrow(() -> new RuntimeException("팔로우할 사용자가 존재하지 않습니다."));
+        User target = userRepositroy.findById(followingId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User currentUser = userRepositroy.findById(myId).orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
 
         // 팔로우 관계인지 확인

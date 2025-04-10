@@ -31,7 +31,7 @@ public class CommentService {
         // 저장된 객체 반환
         Comment savedComment = commentRepository.save(comment);
         // 반환받은 객체 DTO 형태로 반환
-        return new CommentResponseDto(savedComment.getId(),user.getUsername(), savedComment.getContent());
+        return new CommentResponseDto(savedComment.getId(),user.getUserName(), savedComment.getContent());
     }
 
     public List<CommentResponseDto> findAll() {
