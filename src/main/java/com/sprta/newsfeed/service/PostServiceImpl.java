@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 
         return new PostResponseDto(
                 saved.getId(),
-                saved.getUser().getUsername(),
+                saved.getUser().getUserName(),
                 saved.getTitle(),
                 saved.getContent(),
                 saved.getCountComments(),
@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
 
         return new PostResponseDto(
                 post.getId(),
-                post.getUser().getUsername(),
+                post.getUser().getUserName(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
 
         return posts.stream().map(post -> new PostResponseDto(
                 post.getId(),
-                post.getUser().getUsername(),
+                post.getUser().getUserName(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),

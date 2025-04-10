@@ -45,7 +45,7 @@ public class PostResponseDto {
     //게시글 + 댓글 응답할 때
     public PostResponseDto(Post post, List<Comment> comments){
         this.id = post.getId();
-        this.userName = post.getUser().getUsername();
+        this.userName = post.getUser().getUserName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.commentCount = post.getCountComments();
