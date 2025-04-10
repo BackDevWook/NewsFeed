@@ -2,7 +2,7 @@ package com.sprta.newsfeed.controller;
 
 
 import com.sprta.newsfeed.common.Const;
-import com.sprta.newsfeed.dto.LoginResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
 import com.sprta.newsfeed.dto.PostCreateRequestDto;
 import com.sprta.newsfeed.dto.PostResponseDto;
 import com.sprta.newsfeed.dto.PostUpdateRequestDto;
