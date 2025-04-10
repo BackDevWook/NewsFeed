@@ -22,14 +22,14 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment){
         this.id = comment.getId();
-        this.username = comment.getUser().getUsername();
+        this.username = comment.getUser().getUserName();
         this.content = comment.getContent();
 
     }
 
 
     public static CommentResponseDto commentDto(Comment comment) {
-        return new CommentResponseDto(comment.getId(),comment.getUser().getUsername(), comment.getContent());
+        return new CommentResponseDto(comment.getId(),comment.getUser().getUserName(), comment.getContent());
     }
 
 }

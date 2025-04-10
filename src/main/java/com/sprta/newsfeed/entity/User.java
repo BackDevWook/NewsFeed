@@ -14,7 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String userName;
 
     @Column(nullable = false, unique = true)
@@ -45,4 +45,5 @@ public class User {
     public boolean isDeleted() {
         return isDeleted;
     }
+    
 }
