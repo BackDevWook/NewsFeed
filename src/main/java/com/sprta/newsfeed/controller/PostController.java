@@ -3,9 +3,9 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.LoginResponseDto;
-import com.sprta.newsfeed.dto.PostCreateRequestDto;
-import com.sprta.newsfeed.dto.PostResponseDto;
-import com.sprta.newsfeed.dto.PostUpdateRequestDto;
+import com.sprta.newsfeed.dto.Post.PostCreateRequestDto;
+import com.sprta.newsfeed.dto.Post.PostResponseDto;
+import com.sprta.newsfeed.dto.Post.PostUpdateRequestDto;
 import com.sprta.newsfeed.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

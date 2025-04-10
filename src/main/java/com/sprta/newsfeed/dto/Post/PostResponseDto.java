@@ -1,4 +1,4 @@
-package com.sprta.newsfeed.dto;
+package com.sprta.newsfeed.dto.Post;
 
 
 import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
