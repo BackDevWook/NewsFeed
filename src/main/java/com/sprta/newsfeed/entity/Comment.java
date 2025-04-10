@@ -29,10 +29,10 @@ public class Comment extends BaseEntity{
     private Post post;
 
 
-    public Comment(String content, User user, Post post) {
-        this.content = content;
+    public Comment(User user, Post post, String content) {
         this.user = user;
         this.post = post;
+        this.content = content;
     }
 
     public Comment(User user, String content) {

@@ -1,6 +1,5 @@
 package com.sprta.newsfeed.dto.Comment;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sprta.newsfeed.entity.Comment;
 import lombok.Getter;
 

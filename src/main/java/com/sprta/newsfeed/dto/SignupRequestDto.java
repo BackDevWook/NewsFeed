@@ -18,7 +18,8 @@ public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "유효한 이메일 형식이 아닙니다.")
-    @Pattern(regexp = "^[A-Za-z0-9]+@naver\\.com$", message = "네이버 계정으로 회원가입해 주세요.")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@(naver\\.com|gmail\\.com|daum\\.net)$",
+            message = "naver.com, gmail.com, daum.net 이메일만 사용 가능합니다.")
     private String email;
 
     @NotBlank(message = "비밀번호는 필수입니다.")
