@@ -10,6 +10,8 @@ import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
+import com.sprta.newsfeed.security.customerror.CustomException;
+import com.sprta.newsfeed.security.customerror.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -105,9 +107,8 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
-    @Override
     public Post findById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));  // 게시물이 없으면 예외 던짐
     }
 }

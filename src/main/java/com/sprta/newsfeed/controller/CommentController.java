@@ -8,8 +8,6 @@ import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
-import com.sprta.newsfeed.exception.comment.ErrorResponse;
-import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import com.sprta.newsfeed.service.CommentService;
@@ -56,7 +54,7 @@ public class CommentController {
         Post post = postService.findById(postId);
 
         // 댓글 작성 서비스 호출 후 사용자가 작성한 내용을 저장
-        CommentResponseDto commentResponseDto = commentService.save(user, post, requestDto.getContent());
+        CommentResponseDto commentResponseDto = commentService.save(postId, user, requestDto.getContent());
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
@@ -138,14 +136,6 @@ public class CommentController {
 
         // 댓글 삭제 성공 후 NO_CONTENT 반환
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-    // 댓글 404 에러
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("404", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }

@@ -4,17 +4,13 @@ import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
-import com.sprta.newsfeed.exception.comment.NotFoundException;
 import com.sprta.newsfeed.repository.CommentRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 
 
@@ -31,24 +27,29 @@ public class CommentService {
      * @return 조회한 댓글 객체
      */
     public Comment findByIdOrElseThrow(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id + "은(는) 없는 아이디입니다."));
+        return commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)); // 커스텀 에러 코드 사용
     }
 
     /**
      * 새로운 댓글을 생성하는 메서드
      * @param user 댓글 작성자
-     * @param post 댓글이 있는 게시물
+     * @param postId 댓글이 있는 게시물
      * @param content 댓글 내용
      * @return 댓글 정보가 담긴 DTO 반환
      */
-    public CommentResponseDto save(User user, Post post, String content) {
+    public CommentResponseDto save(Long postId, User user, String content) {
+        // 게시물 ID를 조회하고 없으면 예외 처리
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND)); // 게시물이 없으면 예외 던짐
 
-        // 객체 생성
+        // 댓글 객체 생성
         Comment comment = new Comment(user, post, content);
-        // 저장된 객체 반환
+
+        // 댓글 저장
         Comment savedComment = commentRepository.save(comment);
-        // 반환받은 객체 DTO 형태로 반환
-        return new CommentResponseDto(savedComment.getId(),user.getUserName(), savedComment.getContent());
+
+        // 댓글 저장 후 DTO 형태로 반환
+        return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent());
     }
 
     /**
@@ -60,7 +61,7 @@ public class CommentService {
 
         // 게시물 ID를 조회하고 없으면 예외처리
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         // 게시물에 있는 댓글들 반환
         List<Comment> comments = commentRepository.findByPost(post);
@@ -99,6 +100,7 @@ public class CommentService {
      * @return 댓글 작성자인지 여부
      */
     public boolean checkCommentOwner(Long commentId, Long userId) {
+
         // 댓글을 찾고 작성자가 로그인한 사용자와 일치하는지 확인
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
