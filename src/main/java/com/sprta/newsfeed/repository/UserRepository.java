@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 회원가입 시 중복 이메일 검증에 사용
     boolean existsByEmailAndIsDeletedFalse(String email);
 
+    // 삭제된 사용자 중 동일 이메일이 존재하는지 확인
     boolean existsByEmailAndIsDeletedTrue(String email);
 
     Long id(Long id);

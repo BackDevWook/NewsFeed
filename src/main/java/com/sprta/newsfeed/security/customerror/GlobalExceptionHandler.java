@@ -28,21 +28,23 @@ public class GlobalExceptionHandler {
         );
     }
 
+    // @Valid, @Validated 사용 시 유효성 검사에 실패하면 발생하는 예외를 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.joining(", ")); // 여러 필드 메시지를 한 줄로
+                .collect(Collectors.joining(", "));
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                ErrorCode.INVALID_INPUT.getStatus(),
-                ErrorCode.INVALID_INPUT.getCode(),
-                errorMessage
+        // 에러 메시지를 담은 ErrorResponse 객체를 생성하고, HTTP 상태 코드와 함께 응답
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        ErrorCode.INVALID_INPUT.getStatus(),
+                        ErrorCode.INVALID_INPUT.getCode(),
+                        errorMessage
+                ),
+                HttpStatus.valueOf(ErrorCode.INVALID_INPUT.getStatus())
         );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ErrorCode.INVALID_INPUT.getStatus()));
     }
-
 }
