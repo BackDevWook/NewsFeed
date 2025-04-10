@@ -21,6 +21,8 @@ public enum ErrorCode {
     COMMENT_CREATION_FAILED(400, "E", "댓글 생성에 실패했습니다."),
     COMMENT_UPDATE_FAILED(400, "E", "댓글 수정에 실패했습니다."),
     COMMENT_DELETE_FAILED(400, "E", "댓글 삭제에 실패했습니다."),
+    COMMENT_UPDATE_FORBIDDEN(403, "E", "댓글 작성자만 수정할 수 있습니다."),
+    COMMENT_DELETE_FORBIDDEN(403, "E", "게시물 작성자 혹은 댓글 작성자만 삭제할 수 있습니다."),
 
     // 팔로우
     ALREADY_FOLLOWING(409, "E", "이미 팔로우한 사용자입니다."),

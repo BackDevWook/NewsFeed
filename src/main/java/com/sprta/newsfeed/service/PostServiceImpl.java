@@ -107,9 +107,8 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
-    @Override
     public Post findById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));  // 게시물이 없으면 예외 던짐
     }
 }
