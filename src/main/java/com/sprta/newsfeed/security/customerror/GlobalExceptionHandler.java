@@ -47,4 +47,5 @@ public class GlobalExceptionHandler {
                 HttpStatus.valueOf(ErrorCode.INVALID_INPUT.getStatus())
         );
     }
+
 }
