@@ -26,7 +26,7 @@ public class PostController {
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateRequestDto requestDto,
                                                       @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-        PostResponseDto response = postService.createPost(requestDto, dto.getId());
+        PostResponseDto response = postService.createPost(requestDto, dto.getUserId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
