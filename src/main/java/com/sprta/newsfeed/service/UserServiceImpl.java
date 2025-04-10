@@ -1,9 +1,11 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.LoginResponseDto;
-import com.sprta.newsfeed.dto.SignupResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
+import com.sprta.newsfeed.dto.Signup.SignupResponseDto;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.UserRepository;
+import com.sprta.newsfeed.security.customerror.CustomException;
+import com.sprta.newsfeed.security.customerror.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -27,9 +29,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public SignupResponseDto signUp(String userName, String email, String password) {
 
-        // 중복 이메일 체크 (논리 삭제되지 않은 사용자만 검사)
+        // 탈퇴한 계정인지 먼저 확인
+        if (userRepository.existsByEmailAndIsDeletedTrue(email)) {
+            throw new CustomException(ErrorCode.WITHDRAWN_EMAIL_REUSE_NOT_ALLOWED);
+        }
+
+        // 정상 계정과 중복 여부 확인
         if (userRepository.existsByEmailAndIsDeletedFalse(email)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.");
+            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
 
         // 비밀번호 암호화
@@ -79,15 +86,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.")); //수정 필요
 
-
-        // 이미 탈퇴한 사용자라면 예외 처리
+        // 회원 탈퇴를 진행한 user 인지 확인
         if (user.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.GONE, "이미 탈퇴한 사용자입니다.");
+            throw new CustomException(ErrorCode.USER_ALREADY_DELETED);
         }
 
-        // 비밀번호 검증
+        //비밀번호 확인
         if (!passwordEncoder.matches(inputPassword, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHED);
         }
 
         // 논리 삭제 처리

@@ -2,10 +2,9 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
-import com.sprta.newsfeed.dto.Comment.CommentWithUsernameResponseDto;
 import com.sprta.newsfeed.dto.Comment.CreateCommentRequestDto;
 import com.sprta.newsfeed.dto.Comment.UpdateCommentRequestDto;
-import com.sprta.newsfeed.dto.LoginResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;

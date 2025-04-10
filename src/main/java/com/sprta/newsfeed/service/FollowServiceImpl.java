@@ -1,7 +1,6 @@
 package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
-import com.sprta.newsfeed.dto.LoginResponseDto;
 import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.FollowRepository;

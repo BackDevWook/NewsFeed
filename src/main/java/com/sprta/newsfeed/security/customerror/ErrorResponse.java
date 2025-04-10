@@ -13,4 +13,10 @@ public class ErrorResponse { // 에러 메시지를 JSON 형태로 전달할 DTO
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
     }
+
+    public ErrorResponse(int status, String code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+    }
 }

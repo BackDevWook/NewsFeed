@@ -1,7 +1,7 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.LoginResponseDto;
-import com.sprta.newsfeed.dto.SignupResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
+import com.sprta.newsfeed.dto.Signup.SignupResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {

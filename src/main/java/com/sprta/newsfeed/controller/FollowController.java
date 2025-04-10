@@ -2,7 +2,7 @@ package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.FollowCountResponseDto;
-import com.sprta.newsfeed.dto.LoginResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
 import com.sprta.newsfeed.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
