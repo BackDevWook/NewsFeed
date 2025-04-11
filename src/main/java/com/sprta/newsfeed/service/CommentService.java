@@ -94,19 +94,25 @@ public class CommentService {
      */
     @Transactional
     public void delete(Long commentId, Long userId) {
+
+        // 댓글 ID로 댓글 조회, 없으면 예외 발생
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
+        // 댓글 작성자인지 확인
         boolean isCommentOwner = comment.getUser().getId().equals(userId);
+        // 게시글 작성자인지 확인
         boolean isPostOwner = comment.getPost().getUser().getId().equals(userId);
-
+        // 댓글 작성자 혹은 게시글 작성자가 아니라면 삭제 권한 없음 예외 발생
         if (!isCommentOwner && !isPostOwner) {
             throw new CustomException(ErrorCode.COMMENT_DELETE_FORBIDDEN);
         }
 
+        // 댓글이 속한 게시글 가져오기
         Post post = comment.getPost();
+        // 게시글의 댓글 수 감소
         post.decreaseCommentCount();
-
+        // 댓글 삭제
         commentRepository.delete(comment);
     }
 }

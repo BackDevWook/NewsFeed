@@ -89,12 +89,12 @@ public class CommentController {
      * @return
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<String> delete(
             @PathVariable Long commentId,
             @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser
     ) {
         commentService.delete(commentId, loginUser.getUserId());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("댓글이 삭제되었습니다.");
     }
 
 }
