@@ -19,7 +19,7 @@ public interface PostService {
 
     PostResponseDto getPostWithComments(Long id);
 
-    void deletePost(Long id);
+    void deletePost(Long id, String email);
 
     Post findById(Long postId);
 }

@@ -15,6 +15,7 @@ public enum ErrorCode {
     POST_UPDATE_FAILED(400, "PST002", "게시물 수정에 실패했습니다."),
     POST_DELETE_FAILED(400, "PST003", "게시물 삭제에 실패했습니다."),
     POST_CREATION_FAILED(400, "PST004", "게시물 생성에 실패하셨습니다."),
+    FORBIDDEN_DELETE(403, "PST005","게시글 삭제 권한이 없습니다."),
 
     // 댓글
     COMMENT_NOT_FOUND(404, "CMT001", "해당 댓글을 찾을 수 없습니다."),

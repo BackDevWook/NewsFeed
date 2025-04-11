@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class PostServiceImpl implements PostService {
     @Override
     //게시글 조회 로직
     public List<PostResponseDto> getAllPosts(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
         Page<Post> posts = postRepository.findAll(pageable);
 
         return posts.stream().map(post -> {
@@ -103,12 +104,16 @@ public class PostServiceImpl implements PostService {
         return new PostResponseDto(post, comments, likeCount);
     }
 
-
+    //게시글 삭제
     @Override
-    //게시글 삭제 로직
-    public void deletePost(Long id) {
+    public void deletePost(Long id, String email) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getEmail().equals(email)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_DELETE);
+        }
+
         postRepository.delete(post);
     }
 
