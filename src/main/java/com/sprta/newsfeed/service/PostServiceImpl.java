@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 @Service
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
                 post.getContent(),
                 post.getCountComments(),
                 post.getLikesCount()
-        )).collect(Collectors.toList());
+        )).toList();
 
     }
 
