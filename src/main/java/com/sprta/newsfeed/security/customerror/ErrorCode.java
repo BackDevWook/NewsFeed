@@ -47,7 +47,6 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCHED(401, "S004", "비밀번호가 일치하지 않습니다."),
     WITHDRAWN_EMAIL_REUSE_NOT_ALLOWED(409, "S005", "탈퇴한 계정의 이메일은 다시 사용할 수 없습니다."),
 
-
     // 게시물 좋아요
     POST_ALREADY_LIKED(400, "E", "이미 좋아요한 게시물입니다."),
     LIKE_NOT_FOUND(404, "E", "좋아요 기록이 존재하지 않습니다."),

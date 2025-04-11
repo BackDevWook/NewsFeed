@@ -8,6 +8,7 @@ import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.CommentRepository;
+import com.sprta.newsfeed.repository.PostLikesRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
 import com.sprta.newsfeed.security.customerror.CustomException;
@@ -17,9 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final PostLikesRepository postLikesRepository;
 
     @Override
     //게시글 작성 로직
@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
                 saved.getTitle(),
                 saved.getContent(),
                 saved.getCountComments(),
-                saved.getLikesCount()
+                postLikesRepository.countByPost(post)
         );
     }
 
@@ -66,7 +66,7 @@ public class PostServiceImpl implements PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                post.getLikesCount()
+                postLikesRepository.countByPost(post)
         );
     }
 
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                post.getLikesCount()
+                postLikesRepository.countByPost(post)
         )).collect(Collectors.toList());
 
     }
@@ -90,12 +90,13 @@ public class PostServiceImpl implements PostService {
     @Override
     // 게시글 + 댓글 조회
     public PostResponseDto getPostWithComments(Long id) {
-      Post post = postRepository.findById(id)
-              .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-      List<Comment> comments = commentRepository.findAllByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostId(id);
+        Long likeCount = postLikesRepository.countByPost(post); // 좋아요 수
 
-      return new PostResponseDto(post, comments);
+        return new PostResponseDto(post, comments, likeCount);
     }
 
 
