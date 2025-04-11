@@ -1,6 +1,7 @@
 package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.dto.follow.FollowCountResponseDto;
+import com.sprta.newsfeed.dto.follow.MyFollowingAndFollowerResponseDto;
 import com.sprta.newsfeed.entity.Follow;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.FollowRepository;
@@ -9,6 +10,8 @@ import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +79,46 @@ public class FollowServiceImpl implements FollowService {
 
         return new FollowCountResponseDto(countFollower, countFollowing);
     }
+
+    // 내가 팔로잉한 사람 보기
+    @Override
+    public List<MyFollowingAndFollowerResponseDto> getMyFollowing(Long userId) {
+
+        User currentUser = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<MyFollowingAndFollowerResponseDto> list = followRepository.findAll().stream() // 스트림 열고
+                .filter(follow -> follow.getFollower().getId().equals(currentUser.getId())) // 팔로워 id가 현재 유저와 동일한 데이터를 찾아서
+                .map(myFollowing -> new MyFollowingAndFollowerResponseDto(myFollowing.getFollowing().getUserName())) // 해당 데이터가 Following_id 및 이름을 추출
+                .toList(); // 리스트로 반환
+
+        if(list.isEmpty()) { // 팔로우 정보가 있는지 확인
+            throw new CustomException(ErrorCode.FOLLOW_NOT_FOUND);
+        }
+
+        return list;
+
+    }
+
+    // 나를 팔로우한 사람 보기
+    @Override
+    public List<MyFollowingAndFollowerResponseDto> getMyFollower(Long userId) {
+
+        User currentUser = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<MyFollowingAndFollowerResponseDto> list =  followRepository.findAll().stream() // 스트림 열고
+                .filter(follow -> follow.getFollowing().getId().equals(currentUser.getId())) // 팔로잉 id가 현재 유저와 동일한 데이터를 찾아서
+                .map(myFollower -> new MyFollowingAndFollowerResponseDto(myFollower.getFollower().getUserName())) // 해당 데이터의 follower_id 값 및 이름을 추출
+                .toList(); // 리스트로 반환
+
+        if(list.isEmpty()) { // 팔로우 정보가 있는지 확인
+            throw new CustomException(ErrorCode.FOLLOW_NOT_FOUND);
+        }
+
+        return list;
+    }
+
+
+
 
 
 }
