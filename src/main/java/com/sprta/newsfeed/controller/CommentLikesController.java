@@ -1,7 +1,7 @@
 package com.sprta.newsfeed.controller;
 
 import com.sprta.newsfeed.common.Const;
-import com.sprta.newsfeed.dto.LoginResponseDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
 import com.sprta.newsfeed.service.CommentLikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class CommentLikesController {
     // 1. 좋아요 누르기
     @PostMapping
     public ResponseEntity<String> addLike(
-            @SessionAttribute(name = Const.LOGIN_USER)LoginResponseDto dto, // 로그인 유저 정보
+            @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto, // 로그인 유저 정보
             @PathVariable Long postId, // 해당 댓글이 있는 게시물 id
             @PathVariable Long commentId) { // 좋아요를 누를 댓글 id
 

@@ -61,11 +61,11 @@ public class UserServiceImpl implements UserService {
 
         // 이메일로 사용자 조회
          User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
-        // 비밀번호 검증
+        //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호 불일치");
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
         // 로그인 성공 → 응답 DTO 생성
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void signout(Long userId, String inputPassword) {
+    public void signout(Long userId, String password) {
 
         // 사용자 ID로 조회
         User user = userRepository.findById(userId)
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //비밀번호 확인
-        if (!passwordEncoder.matches(inputPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHED);
         }
 
