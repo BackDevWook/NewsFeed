@@ -73,13 +73,13 @@ public class CommentController {
      * @return 모든 조건을 통과하면 댓글 수정이 수정되고 OK 반환
      */
     @PatchMapping("/{commentId}")
-    public ResponseEntity<String> updateComment(
+    public ResponseEntity<Void> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid UpdateCommentRequestDto requestDto,
             @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser
             ) {
         commentService.updateComment(commentId, requestDto.getNewContent(), loginUser.getUserId());
-        return ResponseEntity.ok("댓글 내용이 수정되었습니다.");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -89,12 +89,12 @@ public class CommentController {
      * @return
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<String> delete(
+    public ResponseEntity<Void> delete(
             @PathVariable Long commentId,
             @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser
     ) {
         commentService.delete(commentId, loginUser.getUserId());
-        return ResponseEntity.ok("댓글이 삭제되었습니다.");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
