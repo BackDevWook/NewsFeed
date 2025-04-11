@@ -5,15 +5,9 @@ import com.sprta.newsfeed.dto.Comment.CommentResponseDto;
 import com.sprta.newsfeed.dto.Comment.CreateCommentRequestDto;
 import com.sprta.newsfeed.dto.Comment.UpdateCommentRequestDto;
 import com.sprta.newsfeed.dto.Login.LoginResponseDto;
-import com.sprta.newsfeed.entity.Comment;
-import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
-import com.sprta.newsfeed.security.customerror.CustomException;
-import com.sprta.newsfeed.security.customerror.ErrorCode;
 import com.sprta.newsfeed.service.CommentService;
-import com.sprta.newsfeed.service.PostService;
 import com.sprta.newsfeed.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +23,6 @@ public class CommentController {
 
     private final CommentService commentService;
     private final UserService userService;
-    private final PostService postService;
 
     /**
      * 댓글 작성
