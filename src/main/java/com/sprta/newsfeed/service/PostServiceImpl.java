@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
         Post saved = postRepository.save(post);
 
-        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 saved.getId(),
                 saved.getUser().getUserName(),
@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         post.updateContent(requestDto.getContent());
 
-        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 post.getId(),
                 post.getUser().getUserName(),
@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
         Page<Post> posts = postRepository.findAll(pageable);
 
         return posts.stream().map(post -> {
-            int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+            Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
             return new PostResponseDto(
                     post.getId(),
                     post.getUser().getUserName(),
@@ -98,7 +98,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         List<Comment> comments = commentRepository.findAllByPostId(id);
-        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
 
         return new PostResponseDto(post, comments, likeCount);
     }
