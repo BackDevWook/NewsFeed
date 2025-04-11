@@ -34,8 +34,10 @@ public class PostController {
 
     //게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostUpdateRequestDto requestDto) {
-        postService.updatePost(id, requestDto);
+    public ResponseEntity<Void> updatePost(@PathVariable Long id,
+                                           @RequestBody PostUpdateRequestDto requestDto,
+                                           @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+        postService.updatePost(id, requestDto,loginUser.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -55,9 +57,15 @@ public class PostController {
     //게시글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id,
-                                           @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+                                             @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
         postService.deletePost(id, loginUser.getEmail());
         return ResponseEntity.ok("게시글 삭제 완료");
+    }
+
+    //내가 팔로우 한 사람들의 게시글 조회
+    @GetMapping("/followings")
+    public List<PostResponseDto> getFollowedUsersPosts(@SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+        return postService.getTimelinePosts(loginUser.getUserId());
     }
 
 }

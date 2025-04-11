@@ -7,10 +7,7 @@ import com.sprta.newsfeed.dto.Post.PostUpdateRequestDto;
 import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
-import com.sprta.newsfeed.repository.CommentRepository;
-import com.sprta.newsfeed.repository.PostLikesRepository;
-import com.sprta.newsfeed.repository.PostRepository;
-import com.sprta.newsfeed.repository.UserRepository;
+import com.sprta.newsfeed.repository.*;
 import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -22,7 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final PostLikesRepository postLikesRepository;
+    private final FollowRepository followRepository;
 
     @Override
     //게시글 작성 로직
@@ -57,12 +56,19 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     //게시글 수정 로직
-    public PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto, String email) {
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getEmail().equals(email)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_UPDATE);
+        }
+
         post.updateContent(requestDto.getContent());
 
         Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+
         return new PostResponseDto(
                 post.getId(),
                 post.getUser().getUserName(),
@@ -120,5 +126,23 @@ public class PostServiceImpl implements PostService {
     public Post findById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));  // 게시물이 없으면 예외 던짐
+    }
+
+    public List<PostResponseDto> getTimelinePosts(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<Post> posts = postRepository.findAllWithFollowPriority(user);
+
+        return posts.stream()
+                .map(post -> new PostResponseDto(
+                        post.getId(),
+                        post.getUser().getUserName(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getCountComments(),
+                        Math.toIntExact(postLikesRepository.countByPost(post))
+                ))
+                .toList();
     }
 }

@@ -7,13 +7,12 @@ import com.sprta.newsfeed.dto.Post.PostUpdateRequestDto;
 import com.sprta.newsfeed.entity.Post;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PostService {
 
     PostResponseDto createPost(PostCreateRequestDto requestDto,Long loginUserId);
 
-    PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto);
+    PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto, String email);
 
     List<PostResponseDto> getAllPosts(int page);
 
@@ -22,4 +21,6 @@ public interface PostService {
     void deletePost(Long id, String email);
 
     Post findById(Long postId);
+
+    List<PostResponseDto> getTimelinePosts(Long userId);
 }
