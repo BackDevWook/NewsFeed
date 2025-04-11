@@ -8,11 +8,9 @@ import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 import static com.sprta.newsfeed.security.customerror.ErrorCode.USER_NOT_FOUND;
 
 @Service
