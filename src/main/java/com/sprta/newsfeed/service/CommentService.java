@@ -22,15 +22,6 @@ public class CommentService {
     private final PostRepository postRepository;
 
     /**
-     * 댓글 ID로 댓글을 조회
-     * @param id 댓글 고유 식별자 ID값
-     * @return 조회한 댓글 객체
-     */
-    public Comment findByIdOrElseThrow(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)); // 커스텀 에러 코드 사용
-    }
-
-    /**
      * 새로운 댓글을 생성하는 메서드
      * @param user 댓글 작성자
      * @param postId 댓글이 있는 게시물
@@ -48,8 +39,14 @@ public class CommentService {
         // 댓글 저장
         Comment savedComment = commentRepository.save(comment);
 
+        // 댓글 수 증가
+        post.increaseCommentCount();
+
+        // post 객체에 변경된 댓글 수 저장
+        postRepository.save(post);
+
         // 댓글 저장 후 DTO 형태로 반환
-        return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent());
+        return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent(), savedComment.getLikesCount());
     }
 
     /**
@@ -78,46 +75,44 @@ public class CommentService {
      */
     @Transactional
     public void updateComment(Long commentId, String newContent, Long userId) {
-        // 댓글 작성자 여부 확인
-        boolean isOwner = checkCommentOwner(commentId, userId);
-
-        // 작성자가 아니면 예외를 던짐
-        if (!isOwner) {
-            throw new CustomException(ErrorCode.COMMENT_UPDATE_FORBIDDEN);
-        }
-
-        // 댓글을 조회하고, 댓글이 존재하지 않으면 예외를 던짐
-        Comment comment = findByIdOrElseThrow(commentId);
-
-        // 댓글 내용 업데이트
-        comment.updateComment(newContent);
-    }
-
-    /**
-     * 댓글 작성자 확인 메서드
-     * @param commentId 댓글 ID
-     * @param userId 로그인한 사용자 ID
-     * @return 댓글 작성자인지 여부
-     */
-    public boolean checkCommentOwner(Long commentId, Long userId) {
-
-        // 댓글을 찾고 작성자가 로그인한 사용자와 일치하는지 확인
+        // 댓글 찾기
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        return comment.getUser().getId().equals(userId);
+        // 댓글 작성자만 수정 가능함 작성자가 아니면 예외 처리
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.COMMENT_UPDATE_FORBIDDEN);
+        }
+
+        // 댓글 내용 수정
+        comment.updateComment(newContent);
     }
 
     /**
      * 댓글 삭제하는 메서드
      * @param commentId 삭제할 댓글의 고유 식별자 ID값
      */
-    public void delete(Long commentId) {
+    @Transactional
+    public void delete(Long commentId, Long userId) {
 
-        // 댓글을 조회하고, 댓글이 존재하지 않으면 예외를 던짐
-        Comment findComment = findByIdOrElseThrow(commentId);
+        // 댓글 ID로 댓글 조회, 없으면 예외 발생
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
+        // 댓글 작성자인지 확인
+        boolean isCommentOwner = comment.getUser().getId().equals(userId);
+        // 게시글 작성자인지 확인
+        boolean isPostOwner = comment.getPost().getUser().getId().equals(userId);
+        // 댓글 작성자 혹은 게시글 작성자가 아니라면 삭제 권한 없음 예외 발생
+        if (!isCommentOwner && !isPostOwner) {
+            throw new CustomException(ErrorCode.COMMENT_DELETE_FORBIDDEN);
+        }
+
+        // 댓글이 속한 게시글 가져오기
+        Post post = comment.getPost();
+        // 게시글의 댓글 수 감소
+        post.decreaseCommentCount();
         // 댓글 삭제
-        commentRepository.delete(findComment);
+        commentRepository.delete(comment);
     }
 }

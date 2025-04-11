@@ -21,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 @Service
@@ -82,8 +82,8 @@ public class PostServiceImpl implements PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                postLikesRepository.countByPost(post)
-        )).collect(Collectors.toList());
+                post.getLikesCount()
+        )).toList();
 
     }
 
