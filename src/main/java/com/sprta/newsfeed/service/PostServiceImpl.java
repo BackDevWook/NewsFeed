@@ -42,13 +42,14 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
         Post saved = postRepository.save(post);
 
+        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 saved.getId(),
                 saved.getUser().getUserName(),
                 saved.getTitle(),
                 saved.getContent(),
                 saved.getCountComments(),
-                postLikesRepository.countByPost(post)
+                likeCount
         );
     }
 
@@ -60,13 +61,14 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         post.updateContent(requestDto.getContent());
 
+        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 post.getId(),
                 post.getUser().getUserName(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                postLikesRepository.countByPost(post)
+                likeCount
         );
     }
 
@@ -76,15 +78,17 @@ public class PostServiceImpl implements PostService {
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> posts = postRepository.findAll(pageable);
 
-        return posts.stream().map(post -> new PostResponseDto(
-                post.getId(),
-                post.getUser().getUserName(),
-                post.getTitle(),
-                post.getContent(),
-                post.getCountComments(),
-                post.getLikesCount()
-        )).toList();
-
+        return posts.stream().map(post -> {
+            int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+            return new PostResponseDto(
+                    post.getId(),
+                    post.getUser().getUserName(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCountComments(),
+                    likeCount
+            );
+        }).toList();
     }
 
     @Override
@@ -94,7 +98,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         List<Comment> comments = commentRepository.findAllByPostId(id);
-        Long likeCount = postLikesRepository.countByPost(post); // 좋아요 수
+        int likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
 
         return new PostResponseDto(post, comments, likeCount);
     }
