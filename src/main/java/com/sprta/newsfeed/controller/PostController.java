@@ -38,7 +38,7 @@ public class PostController {
         return ResponseEntity.ok("게시글 수정 완료");
     }
 
-    @GetMapping
+    @GetMapping("/api/posts")
     public List<PostResponseDto> getAllPost(@RequestParam int page) {
         return postService.getAllPosts(page);
     }
