@@ -48,6 +48,12 @@ public class CommentService {
         // 댓글 저장
         Comment savedComment = commentRepository.save(comment);
 
+        // 댓글 수 증가
+        post.increaseCommentCount();
+
+        // post 객체에 변경된 댓글 수 저장
+        postRepository.save(post);
+
         // 댓글 저장 후 DTO 형태로 반환
         return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent());
     }
@@ -117,7 +123,13 @@ public class CommentService {
         // 댓글을 조회하고, 댓글이 존재하지 않으면 예외를 던짐
         Comment findComment = findByIdOrElseThrow(commentId);
 
-        // 댓글 삭제
+        // 댓글이 달려 있는 게시글 가져오기
+        Post post = findComment.getPost();
+
+        // 먼저 count 감소
+        post.decreaseCommentCount();
+
+        // 그 다음 댓글 삭제
         commentRepository.delete(findComment);
     }
 }
