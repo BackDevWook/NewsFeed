@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    //로그인 유저 정보 받아와서 게시글 생성
+    //로그인 유저 정보 받아와서 게시글 작성
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateRequestDto requestDto,
                                                       @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
@@ -31,29 +31,28 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
-
+    //게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestBody PostUpdateRequestDto requestDto) {
+    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostUpdateRequestDto requestDto) {
         postService.updatePost(id, requestDto);
-        return ResponseEntity.ok("게시글 수정 완료");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     //게시글 페이지 조회 (api/posts?page="원하는 페이지,0부터 시작임")
     @GetMapping
     public List<PostResponseDto> getAllPost(@RequestParam int page) {
         return postService.getAllPosts(page);
     }
-
+    //게시글 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long id){
         PostResponseDto response = postService.getPostWithComments(id);
         return ResponseEntity.ok(response);
     }
-
-
+    //게시글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return ResponseEntity.ok("게시글 삭제 완료");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
