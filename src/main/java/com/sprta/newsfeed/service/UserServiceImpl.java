@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import static com.sprta.newsfeed.security.customerror.ErrorCode.USER_NOT_FOUND;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
         // 사용자 ID로 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.")); //수정 필요
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         // 회원 탈퇴를 진행한 user 인지 확인
         if (user.isDeleted()) {
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 
 }
