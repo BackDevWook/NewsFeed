@@ -55,7 +55,7 @@ public class CommentService {
         postRepository.save(post);
 
         // 댓글 저장 후 DTO 형태로 반환
-        return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent());
+        return new CommentResponseDto(savedComment.getId(), user.getUserName(), savedComment.getContent(), savedComment.getLikesCount());
     }
 
     /**
