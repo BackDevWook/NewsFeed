@@ -49,7 +49,6 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
-
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
@@ -68,6 +67,7 @@ public class Post extends BaseEntity {
     public void decreaseCommentCount() {
         this.countComments = Math.max(0, this.countComments - 1);
     }
+
 
 
 }
