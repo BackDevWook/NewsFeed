@@ -49,7 +49,6 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
-
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
@@ -57,6 +56,7 @@ public class Post extends BaseEntity {
         this.countComments = 0;
         this.likesCount = 0;
     }
+
 
 
 
