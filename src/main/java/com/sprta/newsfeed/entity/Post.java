@@ -59,10 +59,12 @@ public class Post extends BaseEntity {
     }
 
 
+    // 댓글 수 증가
     public void increaseCommentCount() {
         this.countComments += 1;
     }
 
+    // 댓글 수 감소
     public void decreaseCommentCount() {
         this.countComments = Math.max(0, this.countComments - 1);
     }

@@ -48,7 +48,10 @@ public class CommentService {
         // 댓글 저장
         Comment savedComment = commentRepository.save(comment);
 
+        // 댓글 수 증가
         post.increaseCommentCount();
+
+        // post 객체에 변경된 댓글 수 저장
         postRepository.save(post);
 
         // 댓글 저장 후 DTO 형태로 반환
