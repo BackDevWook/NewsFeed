@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Getter
 @Table(name = "comment")
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Comment extends BaseEntity{
 
     @Id

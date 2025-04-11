@@ -37,7 +37,7 @@ public class PostController {
         postService.updatePost(id, requestDto);
         return ResponseEntity.ok("게시글 수정 완료");
     }
-
+    //게시글 페이지 조회 (api/posts?page="원하는 페이지,0부터 시작임")
     @GetMapping
     public List<PostResponseDto> getAllPost(@RequestParam int page) {
         return postService.getAllPosts(page);

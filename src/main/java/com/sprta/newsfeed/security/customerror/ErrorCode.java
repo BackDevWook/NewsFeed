@@ -40,12 +40,13 @@ public enum ErrorCode {
     COMMENT_LIKE_NOT_FOUND(404, "C-LIK001", "해당 댓글에 좋아요 기록이 없습니다."),
     ALREADY_LIKE_COMMENT(409, "C-LIK002", "이미 해당 댓글에 좋아요를 했습니다."),
 
-    //회원가입 / 회원 탈퇴
+    //회원가입 / 회원 탈퇴 / 로그인
     INVALID_INPUT(400, "REG001", "입력값이 유효하지 않습니다."),
     DUPLICATED_EMAIL(400, "REG002", "이미 존재하는 email입니다."),
     USER_ALREADY_DELETED(410, "REG003", "이미 탈퇴한 사용자입니다."),
     PASSWORD_NOT_MATCHED(401, "REG004", "비밀번호가 일치하지 않습니다."),
     WITHDRAWN_EMAIL_REUSE_NOT_ALLOWED(409, "REG005", "탈퇴한 계정의 이메일은 다시 사용할 수 없습니다."),
+    LOGIN_FAILED(401, "REG001", "이메일 또는 비밀번호가 일치하지 않습니다."),
 
     // 게시물 좋아요
     LIKE_NOT_FOUND(404, "P-LIK001", "좋아요 기록이 존재하지 않습니다."),
@@ -54,7 +55,6 @@ public enum ErrorCode {
     // 인증/인가
     UNAUTHORIZED_USER(401, "AUTH001", "로그인 해주세요."),
     MISMATCH_PASSWORD(400, "AUTH002", "비밀번호가 일치하지 않습니다.");
-
 
     private final int status;
     private final String code;
