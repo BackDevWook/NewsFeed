@@ -11,6 +11,7 @@ import com.sprta.newsfeed.security.customerror.CustomException;
 import com.sprta.newsfeed.security.customerror.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class CommentLikesServiceImpl implements CommentLikesService {
 
     // 1. 좋아요 누르기
     @Override
+    @Transactional
     public void saveLike(Long userId, Long postId, Long commentId) {
 
         // 해당 댓글이 있는 게시물이 존재하지 않으면 에러처리
@@ -53,6 +55,7 @@ public class CommentLikesServiceImpl implements CommentLikesService {
 
     // 2. 좋아요 취소하기
     @Override
+    @Transactional
     public void deleteLike(Long userId, Long postId, Long commentId) {
 
         // 해당 댓글이 있는 게시물이 존재하지 않으면 에러처리
@@ -78,7 +81,5 @@ public class CommentLikesServiceImpl implements CommentLikesService {
         // comment 엔티티에 좋아요 수 1 늘려서 저장
         commentRepository.save(comment);
     }
-
-    // 3. 댓글에 좋아요 수 보기
 
 }
