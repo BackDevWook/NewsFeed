@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
          User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAILED));
 
+        // 탈퇴한 계정인지 먼저 확인
+        if (userRepository.existsByEmailAndIsDeletedTrue(email)) {
+            throw new CustomException(ErrorCode.WITHDRAWN_EMAIL_REUSE_NOT_ALLOWED);
+        }
+
         //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
