@@ -34,7 +34,7 @@ public class Post extends BaseEntity {
     private Integer likesCount = 0;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>(); // 25.04.14 00:57에 수정했음 아침에 회의할 것
+    private List<Comment> comments = new ArrayList<>();
 
     // 게시글 1개에 좋아요가 여러개 달리 수 있도록
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
