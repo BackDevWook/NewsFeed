@@ -1,18 +1,26 @@
 package com.sprta.newsfeed.service;
 
-import com.sprta.newsfeed.dto.CreatePostRequestDto;
-import com.sprta.newsfeed.dto.PostResponseDto;
-import com.sprta.newsfeed.dto.UpdatePostRequestDto;
+
+import com.sprta.newsfeed.dto.Post.PostCreateRequestDto;
+import com.sprta.newsfeed.dto.Post.PostResponseDto;
+import com.sprta.newsfeed.dto.Post.PostUpdateRequestDto;
+import com.sprta.newsfeed.entity.Post;
 
 import java.util.List;
 
 public interface PostService {
 
-    PostResponseDto createPost(CreatePostRequestDto requestDto);
+    PostResponseDto createPost(PostCreateRequestDto requestDto,Long loginUserId);
 
-    PostResponseDto updatePost(Long id,UpdatePostRequestDto requestDto);
+    PostResponseDto updatePost(Long id, PostUpdateRequestDto requestDto, String email);
 
     List<PostResponseDto> getAllPosts(int page);
 
-    void deletePost(Long id);
+    PostResponseDto getPostWithComments(Long id);
+
+    void deletePost(Long id, String email);
+
+    Post findById(Long postId);
+
+    List<PostResponseDto> getTimelinePosts(Long userId);
 }

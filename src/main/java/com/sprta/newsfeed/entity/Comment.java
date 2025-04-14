@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Getter
 @Table(name = "comment")
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Comment extends BaseEntity{
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,26 +18,25 @@ public class Comment extends BaseEntity{
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private Integer countLikes;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(nullable = false)
+    private Long likesCount = 0L;
 
-    public Comment(String content, Integer countLikes, User user, Post post) {
-        this.content = content;
-        this.countLikes = countLikes;
+    public Comment(User user, Post post, String content) {
         this.user = user;
         this.post = post;
+        this.content = content;
     }
 
-    public Comment(String content) {
+    public Comment(User user, String content) {
+        this.user = user;
         this.content = content;
     }
 
@@ -51,5 +48,7 @@ public class Comment extends BaseEntity{
         this.content = content;
     }
 
-
+    public void updateLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
+    }
 }

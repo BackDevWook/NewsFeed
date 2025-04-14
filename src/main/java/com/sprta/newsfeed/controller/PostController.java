@@ -1,17 +1,18 @@
 package com.sprta.newsfeed.controller;
 
 
-import com.sprta.newsfeed.dto.CreatePostRequestDto;
-import com.sprta.newsfeed.dto.PostResponseDto;
-import com.sprta.newsfeed.dto.UpdatePostRequestDto;
+import com.sprta.newsfeed.common.Const;
+import com.sprta.newsfeed.dto.Post.PostCreateRequestDto;
+import com.sprta.newsfeed.dto.Post.PostResponseDto;
+import com.sprta.newsfeed.dto.Post.PostUpdateRequestDto;
+import com.sprta.newsfeed.dto.Login.LoginResponseDto;
 import com.sprta.newsfeed.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -21,56 +22,50 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody CreatePostRequestDto requestDto) {
+    //로그인 유저 정보 받아와서 게시글 작성
+    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostCreateRequestDto requestDto,
+                                                      @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto dto) {
 
-    PostResponseDto response = postService.createPost(requestDto);
+        PostResponseDto response = postService.createPost(requestDto, dto.getUserId());
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
 
+    //게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody UpdatePostRequestDto requestDto){
-        try {
-            PostResponseDto responseDto = postService.updatePost(id, requestDto);
-            return ResponseEntity.ok(responseDto);
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("없는 게시물")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
-                        "status", 404,
-                        "errorCode", "NOT_FOUND",
-                        "message", "없는 게시물입니다."
-                ));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                        "status", 400,
-                        "errorCode", "BAD_REQUEST",
-                        "message", "잘못된 입력입니다."
-                ));
-            }
-        }
+    public ResponseEntity<Void> updatePost(@PathVariable Long id,
+                                           @RequestBody PostUpdateRequestDto requestDto,
+                                           @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+        postService.updatePost(id, requestDto,loginUser.getEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //게시글 페이지 조회 (api/posts?page="원하는 페이지,0부터 시작임")
     @GetMapping
-    public List<PostResponseDto> getAllPost(@RequestParam int page){
+    public List<PostResponseDto> getAllPost(@RequestParam int page) {
         return postService.getAllPosts(page);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id){
-        try{
-            postService.deletePost(id);
-            return ResponseEntity.ok("게시물 삭제됨");
-        } catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    Map.of(
-                            "status",404,
-                            "errorCode","NOT_FOUND",
-                            "message","없는 게시물입니다."
-                    )
-            );
-        }
+    //게시글 단건 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long id){
+        PostResponseDto response = postService.getPostWithComments(id);
+        return ResponseEntity.ok(response);
     }
 
+    //게시글 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Long id,
+                                             @SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+        postService.deletePost(id, loginUser.getEmail());
+        return ResponseEntity.ok("게시글 삭제 완료");
+    }
+
+    //내가 팔로우 한 사람들의 게시글 조회
+    @GetMapping("/followings")
+    public List<PostResponseDto> getFollowedUsersPosts(@SessionAttribute(name = Const.LOGIN_USER) LoginResponseDto loginUser) {
+        return postService.getTimelinePosts(loginUser.getUserId());
+    }
 
 }
